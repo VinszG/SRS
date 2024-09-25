@@ -20,7 +20,15 @@ export default {
         raw: "screen and (max-width: 450px)",
       },
     },
-    extend: {},
+    extend: {
+      colors: {
+        'custom-orange': '#EB5B00',
+        'custom-red': '#FF0000',
+      },
+      fontFamily: {
+        'inter': ['Inter', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };

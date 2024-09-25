@@ -10,9 +10,11 @@
     <!-- Tailwind -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <style>
-        @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
-        .font-family-karla { font-family: karla; }
+        .font-family-inter { font-family: 'Inter', sans-serif; }
         .bg-sidebar { background: #ff6200; }
         .cta-btn { color: #ff6200; }
         .upgrade-btn { background: #eb5b00; }
@@ -22,7 +24,7 @@
         .account-link:hover { background: #ff6200; }
     </style>
 </head>
-<body class="bg-gray-100 font-family-karla flex">
+<body class="bg-gray-100 font-family-inter flex">
 
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
@@ -51,12 +53,22 @@
     <div class="w-full flex flex-col h-screen overflow-y-hidden">
         <!-- Desktop Header -->
         <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
-            <div class="w-1/2"></div>
+            <div class="w-full flex items-center">
+                <h1 class="text-xl sm:text-2xl font-bold flex flex-wrap items-center">
+                    <span class="inline-block" style="background: linear-gradient(to right, #EB5B00, #FF0000); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1);">
+                        SERVICE REQUEST SYSTEM
+                    </span>
+                    <span class="text-gray-700 ml-2 whitespace-nowrap">| PT. CIOMAS ADISATWA</span>
+                </h1>
+            </div>
+        
             <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
                 <button @click="isOpen = !isOpen" class="relative z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
-                    <img src="{{ asset('images/user.svg') }}"class="w-full h-full object-cover">
+                    <img src="{{ asset('images/user.svg') }}" class="w-full h-full object-cover">
                 </button>                
+        
                 <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
+        
                 <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
                     <a href="{{ route('account.logout') }}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                 </div>
@@ -91,9 +103,6 @@
                     Service Request System
                 </button>
             </nav>
-            <!-- <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
-                <i class="fas fa-plus mr-3"></i> New Report
-            </button> -->
         </header>
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
@@ -105,23 +114,28 @@
                     <p class="text-2xl font-semibold pb-4 flex items-center">
                         <i class="fas fa-clipboard-list mr-3 text-blue-500"></i> Latest Request
                     </p>
+                    <form action="{{ route('account.user.dashboard') }}" method="GET" class="mb-4">
+                        <input type="text" name="search" placeholder="Cari berdasarkan No. BPJ atau Deskripsi" 
+                               value="{{ request('search') }}" class="border p-2 rounded">
+                        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Cari</button>
+                    </form>
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                         <div class="overflow-x-auto max-h-96">
-                            <table class="w-full">
+                            <table class="w-full table-auto">
                                 <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal sticky top-0">
                                     <tr>
-                                        <th class="py-3 px-6 text-left">No. BPJ</th>
+                                        <th class="py-3 px-6 text-left whitespace-nowrap">No. BPJ</th>
                                         <th class="py-3 px-6 text-left">Permasalahan</th>
-                                        <th class="py-3 px-6 text-center">Jenis</th>
-                                        <th class="py-3 px-6 text-center">Bukti Foto</th>
-                                        <th class="py-3 px-6 text-center">Tanggal Dibuat</th>
-                                        <th class="py-3 px-6 text-center">Status</th>
+                                        <th class="py-3 px-6 text-center whitespace-nowrap">Jenis</th>
+                                        <th class="py-3 px-6 text-center whitespace-nowrap">Bukti Foto</th>
+                                        <th class="py-3 px-6 text-center whitespace-nowrap">Tanggal Dibuat</th>
+                                        <th class="py-3 px-6 text-center whitespace-nowrap">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-gray-600 text-sm font-light">
                                     @if($recentRequests->isEmpty())
                                         <tr>
-                                            <td colspan="5" class="py-4 px-6 text-center">
+                                            <td colspan="6" class="py-4 px-6 text-center">
                                                 <p class="text-gray-500 text-lg">You haven't made any requests yet.</p>
                                             </td>
                                         </tr>
@@ -135,7 +149,7 @@
                                                 </td>
                                                 <td class="py-3 px-6 text-left">
                                                     <div class="flex items-center">
-                                                        <span>{{ $request->deskripsi_permasalahan }}</span>
+                                                        <span class="max-w-xs sm:max-w-sm md:max-w-md break-words">{{ $request->deskripsi_permasalahan }}</span>
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
@@ -178,99 +192,13 @@
                         </div>
                     </div>
                 </div>
-                
-                
-                
-                
             </main>
-    
         </div>
-        
     </div>
 
     <!-- AlpineJS -->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
-    <!-- ChartJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
-
-    <script>
-        var chartOne = document.getElementById('chartOne');
-        var myChart = new Chart(chartOne, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-
-        var chartTwo = document.getElementById('chartTwo');
-        var myLineChart = new Chart(chartTwo, {
-            type: 'line',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
 </body>
 </html>

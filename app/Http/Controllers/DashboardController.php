@@ -8,11 +8,20 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $recentRequests = UserRequest::where('user_id', Auth::id())
-                             ->orderBy('request_date', 'desc')
-                             ->get();
+        $query = UserRequest::where('user_id', Auth::id())
+                    ->orderBy('request_date', 'desc');
+
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('no_bpj', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('deskripsi_permasalahan', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+
+        $recentRequests = $query->take(10)->get();
 
         return view('user.dashboard', compact('recentRequests'));
     }

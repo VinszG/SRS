@@ -69,17 +69,17 @@ class LoginController extends Controller
     }
 
     protected function redirectBasedOnRole($role)
-{
-    $routes = [
-        'admin' => 'admin.dashboard',
-        'user' => 'account.user.dashboard',
-        'plant' => 'plant.dashboard',
-        'super' => 'super.dashboard',
-        'teknisi' => 'teknisi.dashboard'
-    ];
+    {
+        $routes = [
+            'admin' => 'admin.dashboard',
+            'user' => 'account.user.dashboard',
+            'plant' => 'plant.dashboard',
+            'super' => 'super.dashboard',
+            'teknisi' => 'teknisi.dashboard'
+        ];
 
-    return redirect()->route($routes[$role] ?? 'home')->with('loginSuccess', 'SELAMAT ANDA BERHASIL LOGIN');
-}
+        return redirect()->route($routes[$role] ?? 'home')->with('loginSuccess', 'SELAMAT ANDA BERHASIL LOGIN');
+    }
 
     // Menampilkan Page Register User 
     public function register() {
