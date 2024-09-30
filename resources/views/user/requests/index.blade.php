@@ -22,6 +22,24 @@
         .active-nav-link { background: #eb5b00; }
         .nav-item:hover { background: #eb5b00; }
         .account-link:hover { background: #ff6200; }
+        .truncate-text {
+            max-width: 300px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .expanded {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .search-input {
+            @apply w-full px-4 py-2 text-gray-700 bg-white border rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40;
+        }
+        .search-button {
+            @apply px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-family-inter flex">
@@ -113,6 +131,27 @@
                     <p class="text-2xl font-semibold pb-4 flex items-center">
                         <i class="fas fa-clipboard-list mr-3 text-blue-500"></i> History Request
                     </p>
+
+                    <!-- Search Form -->
+                    <form action="{{ route('user.requests.index') }}" method="GET" class="mb-4">
+                        <div class="flex items-center">
+                            <div class="relative w-full">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" name="search" id="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Cari berdasarkan No. BPJ atau Deskripsi" value="{{ request('search') }}">
+                            </div>
+                            <button type="submit" class="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </div>
+                    </form>
+
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                         <div class="overflow-x-auto max-h-96">
                             <table class="w-full table-auto">
@@ -142,8 +181,11 @@
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-left">
-                                                    <div class="flex items-center">
-                                                        <span class="break-words">{{ $request->deskripsi_permasalahan }}</span>
+                                                    <div class="flex items-center justify-between">
+                                                        <span class="truncate-text" id="text-{{ $request->id }}">{{ $request->deskripsi_permasalahan }}</span>
+                                                        <button onclick="toggleExpand('{{ $request->id }}')" class="text-blue-500 hover:text-blue-700 text-xs ml-2 focus:outline-none" id="btn-{{ $request->id }}">
+                                                            Read more
+                                                        </button>
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center whitespace-nowrap">
@@ -182,7 +224,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        {{ $requests->links() }}
+                        {{ $requests->appends(request()->query())->links() }}
                     </div>
                     <div class="mt-4">
                         <a href="{{ route('account.user.dashboard') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Back to Dashboard</a>
@@ -196,5 +238,21 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <script>
+        function toggleExpand(id) {
+            const textElement = document.getElementById(`text-${id}`);
+            const btnElement = document.getElementById(`btn-${id}`);
+            
+            if (textElement.classList.contains('truncate-text')) {
+                textElement.classList.remove('truncate-text');
+                textElement.classList.add('expanded');
+                btnElement.textContent = 'Show less';
+            } else {
+                textElement.classList.add('truncate-text');
+                textElement.classList.remove('expanded');
+                btnElement.textContent = 'Read more';
+            }
+        }
+    </script>
 </body>
 </html>

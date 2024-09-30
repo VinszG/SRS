@@ -8,13 +8,21 @@ use Illuminate\Support\Facades\Auth;
 
 class UserRequestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+
         $requests = UserRequest::where('user_id', Auth::id())
-                        ->orderBy('request_date', 'desc')
-                        ->paginate(5);
+            ->when($search, function ($query, $search) {
+                return $query->where('no_bpj', 'like', "%{$search}%")
+                            ->orWhere('deskripsi_permasalahan', 'like', "%{$search}%");
+            })
+            ->orderBy('request_date', 'desc')
+            ->paginate(5);
+
         return view('user.requests.index', compact('requests'));
     }
+
 
 
     public function create()
@@ -30,7 +38,7 @@ class UserRequestController extends Controller
             'jabatan' => 'required',
             'request_date' => 'required|date',
             'deskripsi_permasalahan' => 'required',
-            'bukti_foto' => 'nullable|image|max:2048',
+            'bukti_foto' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
         ]);
 
         $userRequest = new UserRequest($validatedData);

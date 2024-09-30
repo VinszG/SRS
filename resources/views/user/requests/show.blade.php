@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
-    <meta name="author" content="David Grzyb">
     <meta name="description" content="">
 
     <!-- Tailwind -->
@@ -22,6 +21,12 @@
         .active-nav-link { background: #eb5b00; }
         .nav-item:hover { background: #eb5b00; }
         .account-link:hover { background: #ff6200; }
+        .long-text {
+            max-width: 100%;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-family-inter flex">
@@ -150,7 +155,7 @@
                     
                     <div class="mt-6">
                         <p class="text-gray-700 font-bold mb-2">Deskripsi Permasalahan:</p>
-                        <p class="text-gray-600">{{ $request->deskripsi_permasalahan }}</p>
+                        <p class="text-gray-600 long-text">{{ $request->deskripsi_permasalahan }}</p>
                     </div>
                     
                     @if($request->bukti_foto)

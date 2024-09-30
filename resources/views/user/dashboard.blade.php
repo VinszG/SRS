@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
-    <meta name="author" content="David Grzyb">
     <meta name="description" content="">
 
     <!-- Tailwind -->
@@ -44,8 +43,8 @@
                 History Request
             </a>
         </nav>
-        <a href="dashboard" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
-            <i class="fas fa-arrow-circle-up mr-3"></i>
+        <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
+            <i class=""></i>
             Service Request System
         </a>
     </aside>
@@ -115,9 +114,22 @@
                         <i class="fas fa-clipboard-list mr-3 text-blue-500"></i> Latest Request
                     </p>
                     <form action="{{ route('account.user.dashboard') }}" method="GET" class="mb-4">
-                        <input type="text" name="search" placeholder="Cari berdasarkan No. BPJ atau Deskripsi" 
-                               value="{{ request('search') }}" class="border p-2 rounded">
-                        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Cari</button>
+                        <div class="flex items-center">
+                            <div class="relative w-full">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" name="search" id="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Cari berdasarkan No. BPJ atau Deskripsi" value="{{ request('search') }}">
+                            </div>
+                            <button type="submit" class="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </div>
                     </form>
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                         <div class="overflow-x-auto max-h-96">
@@ -131,7 +143,7 @@
                                         <th class="py-3 px-6 text-center whitespace-nowrap">Tanggal Dibuat</th>
                                         <th class="py-3 px-6 text-center whitespace-nowrap">Status</th>
                                     </tr>
-                                </thead>
+                                </thead>    
                                 <tbody class="text-gray-600 text-sm font-light">
                                     @if($recentRequests->isEmpty())
                                         <tr>
@@ -159,12 +171,12 @@
                                                         <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Non-Urgent</span>
                                                     @endif
                                                 </td>
-                                                <td class="py-3 px-6 text-center">
-                                                    @if($request->bukti_foto)
-                                                        <img src="{{ asset('storage/' . $request->bukti_foto) }}" alt="" class="w-16 h-16 object-cover rounded">
+                                                <td class="py-3 px-6 text-center flex flex-col items-center">
+                                                   @if($request->bukti_foto)
+                                                        <img src="{{ url('storage/' . $request->bukti_foto) }}" alt="" class="w-16 h-16 object-cover rounded mt-2">
                                                     @else
-                                                        <span class="text-gray-400">Tidak ada foto</span>
-                                                    @endif
+                                                        <span class="text-gray-400 mt-2">Tidak ada foto</span>
+                                                    @endif 
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
                                                     <span>{{ $request->request_date }}</span>
@@ -196,9 +208,10 @@
         </div>
     </div>
 
-    <!-- AlpineJS -->
+        <!-- AlpineJS -->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+
 </body>
 </html>
