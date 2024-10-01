@@ -29,6 +29,7 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function() {
     // User routes
     Route::group(['middleware' => 'role:user'], function() {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('account.user.dashboard');
+        Route::get('profile', [DashboardController::class, 'profile'])->name('user.profile');
         Route::get('requests', [UserRequestController::class, 'index'])->name('user.requests.index');
         Route::get('requests/create', [UserRequestController::class, 'create'])->name('user.requests.create');
         Route::post('requests', [UserRequestController::class, 'store'])->name('user.requests.store');

@@ -115,6 +115,8 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('account.login');
     }
+
+    
 }
 
 // class LoginController extends Controller

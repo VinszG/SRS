@@ -87,6 +87,7 @@
                 <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
         
                 <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
+                    <a href="{{ route('user.profile') }}" class="block px-4 py-2 account-link hover:text-white">Profile</a>
                     <a href="{{ route('account.logout') }}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                 </div>
             </div>
@@ -181,9 +182,9 @@
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-left">
-                                                    <div class="flex items-center justify-between">
-                                                        <span class="truncate-text" id="text-{{ $request->id }}">{{ $request->deskripsi_permasalahan }}</span>
-                                                        <button onclick="toggleExpand('{{ $request->id }}')" class="text-blue-500 hover:text-blue-700 text-xs ml-2 focus:outline-none" id="btn-{{ $request->id }}">
+                                                    <div class="flex flex-col items-start">
+                                                        <div class="truncate-text w-full" id="text-{{ $request->id }}">{{ $request->deskripsi_permasalahan }}</div>
+                                                        <button onclick="toggleExpand('{{ $request->id }}')" class="text-blue-500 hover:text-blue-700 text-xs mt-1 focus:outline-none" id="btn-{{ $request->id }}">
                                                             Read more
                                                         </button>
                                                     </div>

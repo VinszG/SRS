@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <title>User Profile</title>
     <meta name="description" content="">
 
     <!-- Tailwind -->
@@ -21,12 +21,6 @@
         .active-nav-link { background: #eb5b00; }
         .nav-item:hover { background: #eb5b00; }
         .account-link:hover { background: #ff6200; }
-        .long-text {
-            max-width: 100%;
-            word-wrap: break-word;
-            white-space: pre-wrap;
-            overflow-wrap: break-word;
-        }
     </style>
 </head>
 <body class="bg-gray-100 font-family-inter flex">
@@ -75,7 +69,6 @@
                 <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
         
                 <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-                    <a href="{{ route('user.profile') }}" class="block px-4 py-2 account-link hover:text-white">Profile</a>
                     <a href="{{ route('account.logout') }}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                 </div>
             </div>
@@ -84,7 +77,7 @@
         <!-- Mobile Header & Nav -->
         <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
             <div class="flex items-center justify-between">
-                <a href="index.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
+                <a href="{{ route('account.user.dashboard') }}" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">User</a>
                 <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
                     <i x-show="!isOpen" class="fas fa-bars"></i>
                     <i x-show="isOpen" class="fas fa-times"></i>
@@ -93,84 +86,45 @@
 
             <!-- Dropdown Nav -->
             <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
-                <a href="dashboard" class="flex items-center active-nav-link text-white py-2 pl-4 nav-item">
+                <a href="{{ route('account.user.dashboard') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
                     <i class="fas fa-tachometer-alt mr-3"></i>
                     Dashboard
+                </a>
+                <a href="{{ route('user.requests.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-clipboard-list mr-3"></i>
+                    History Request
                 </a>
                 <a href="{{ route('account.logout') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
                     <i class="fas fa-sign-out-alt mr-3"></i>
                     Sign Out
                 </a>
-                <a href="{{ route('user.requests.create') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center no-underline">
-                    <i class="fas fa-plus mr-3"></i> New Report
-                </a>
-                <button class="w-full bg-white cta-btn font-semibold py-2 mt-3 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
-                    <i class="fas fa-arrow-circle-up mr-3"></i>
-                    Service Request System
-                </button>
             </nav>
         </header>
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <h1 class="text-3xl text-black pb-6">Request Details</h1>
-                
-                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                    <div class="mb-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Request #{{ $request->no_bpj }}</h2>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-gray-700 font-bold mb-2">Name:</p>
-                            <p class="text-gray-600">{{ $request->name }}</p>
-                        </div>
+                <h1 class="text-3xl text-black pb-6">User Profile</h1>
 
-                        <div>
-                            <p class="text-gray-700 font-bold mb-2">Status:</p>
-                            <p class="text-gray-600">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                {{ $request->status == 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                   ($request->status == 'In Progress' ? 'bg-blue-100 text-blue-800' : 
-                                   'bg-green-100 text-green-800') }}">
-                                    {{ $request->status }}
-                                </span>
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
+                    <div class="-mx-3 md:flex mb-6">
+                        <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="name">
+                                Name
+                            </label>
+                            <p class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3">
+                                {{ $user->name }}
                             </p>
                         </div>
-                        
-                        <div>
-                            <p class="text-gray-700 font-bold mb-2">Departemen:</p>
-                            <p class="text-gray-600">{{ $request->departemen }}</p>
-                        </div>
-                        
-                        <div>
-                            <p class="text-gray-700 font-bold mb-2">Jabatan:</p>
-                            <p class="text-gray-600">{{ $request->jabatan }}</p>
-                        </div>
-                        
-                        <div>
-                            <p class="text-gray-700 font-bold mb-2">Request Date:</p>
-                            <p class="text-gray-600">{{ $request->request_date->format('d/m/Y') }}</p>
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="email">
+                                Email
+                            </label>
+                            <p class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                {{ $user->email }}
+                            </p>
                         </div>
                     </div>
-                    
-                    <div class="mt-6">
-                        <p class="text-gray-700 font-bold mb-2">Deskripsi Permasalahan:</p>
-                        <p class="text-gray-600 long-text">{{ $request->deskripsi_permasalahan }}</p>
-                    </div>
-                    
-                    @if($request->bukti_foto)
-                        <div class="mt-6">
-                            <p class="text-gray-700 font-bold mb-2">Bukti Foto:</p>
-                            <img src="{{ asset('storage/'.$request->bukti_foto) }}" alt="Bukti Foto" class="max-w-md h-auto rounded-lg shadow-lg">
-                        </div>
-                    @endif
-                    
-                    <div class="mt-8">
-                        <a href="{{ route('user.requests.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                            Back to History
-                        </a>
-                    </div>
+                    <!-- Add more user details here as needed -->
                 </div>
             </main>
         </div>

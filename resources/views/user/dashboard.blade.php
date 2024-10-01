@@ -21,6 +21,18 @@
         .active-nav-link { background: #eb5b00; }
         .nav-item:hover { background: #eb5b00; }
         .account-link:hover { background: #ff6200; }
+        .truncate-text {
+            max-width: 300px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .expanded {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-family-inter flex">
@@ -33,7 +45,7 @@
             </a>
         </div>
         <nav class="text-white text-base font-semibold pt-3">
-            <a href="dashboard" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+            <a href="{{ route('account.user.dashboard') }}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                 <i class="fas fa-tachometer-alt mr-3"></i>
                 Dashboard
             </a>
@@ -43,8 +55,8 @@
                 History Request
             </a>
         </nav>
-        <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
-            <i class=""></i>
+        <a href="dashboard" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
+            <i class="fas fa-arrow-circle-up mr-3"></i>
             Service Request System
         </a>
     </aside>
@@ -69,6 +81,7 @@
                 <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
         
                 <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
+                    <a href="{{ route('user.profile') }}" class="block px-4 py-2 account-link hover:text-white">Profile</a>
                     <a href="{{ route('account.logout') }}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                 </div>
             </div>
@@ -77,7 +90,7 @@
         <!-- Mobile Header & Nav -->
         <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
             <div class="flex items-center justify-between">
-                <a href="index.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
+                <a href="index.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">User</a>
                 <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
                     <i x-show="!isOpen" class="fas fa-bars"></i>
                     <i x-show="isOpen" class="fas fa-times"></i>
@@ -90,14 +103,18 @@
                     <i class="fas fa-tachometer-alt mr-3"></i>
                     Dashboard
                 </a>
+                <a href="{{ route('user.requests.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-clipboard-list mr-3"></i>
+                    History Request
+                </a>
                 <a href="{{ route('account.logout') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
                     <i class="fas fa-sign-out-alt mr-3"></i>
                     Sign Out
                 </a>
-                <a href="{{ route('user.requests.create') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center no-underline">
+                <a href="{{ route('user.requests.create') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-3 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
                     <i class="fas fa-plus mr-3"></i> New Report
                 </a>
-                <button class="w-full bg-white cta-btn font-semibold py-2 mt-3 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+                <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
                     <i class="fas fa-arrow-circle-up mr-3"></i>
                     Service Request System
                 </button>
@@ -106,9 +123,7 @@
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <a href="dashboard">
-                    <h1 class="text-3xl text-black pb-6">Dashboard</h1>
-                </a>
+                <h1 class="text-3xl text-black pb-6">Dashboard</h1>
                 <div class="w-full mt-12">
                     <p class="text-2xl font-semibold pb-4 flex items-center">
                         <i class="fas fa-clipboard-list mr-3 text-blue-500"></i> Latest Request
@@ -160,16 +175,21 @@
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-left">
-                                                    <div class="flex items-center">
-                                                        <span class="max-w-xs sm:max-w-sm md:max-w-md break-words">{{ $request->deskripsi_permasalahan }}</span>
+                                                    <div class="flex flex-col items-start">
+                                                        <div class="truncate-text w-full" id="text-{{ $request->id }}">{{ $request->deskripsi_permasalahan }}</div>
+                                                        <button onclick="toggleExpand('{{ $request->id }}')" class="text-blue-500 hover:text-blue-700 text-xs mt-1 focus:outline-none" id="btn-{{ $request->id }}">
+                                                            Read more
+                                                        </button>
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
-                                                    @if(strtolower($request->jenis) == 'urgent')
-                                                        <span class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs">Urgent</span>
-                                                    @else
-                                                        <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Non-Urgent</span>
-                                                    @endif
+                                                    <div class="flex justify-center">
+                                                        @if(strtolower($request->jenis) == 'urgent')
+                                                            <span class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs whitespace-nowrap">Urgent</span>
+                                                        @else
+                                                            <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs whitespace-nowrap">Non-Urgent</span>
+                                                        @endif
+                                                    </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center flex flex-col items-center">
                                                    @if($request->bukti_foto)
@@ -208,10 +228,26 @@
         </div>
     </div>
 
-        <!-- AlpineJS -->
+    <!-- AlpineJS -->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
 
+    <script>
+        function toggleExpand(id) {
+            const textElement = document.getElementById(`text-${id}`);
+            const btnElement = document.getElementById(`btn-${id}`);
+            
+            if (textElement.classList.contains('truncate-text')) {
+                textElement.classList.remove('truncate-text');
+                textElement.classList.add('expanded');
+                btnElement.textContent = 'Show less';
+            } else {
+                textElement.classList.add('truncate-text');
+                textElement.classList.remove('expanded');
+                btnElement.textContent = 'Read more';
+            }
+        }
+    </script>
 </body>
 </html>
