@@ -123,7 +123,9 @@
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <h1 class="text-3xl text-black pb-6">Dashboard</h1>
+                <a class="text-3xl text-black pb-6" href="{{ route('account.user.dashboard') }}">
+                    Dashboard
+                </a>
                 <div class="w-full mt-12">
                     <p class="text-2xl font-semibold pb-4 flex items-center">
                         <i class="fas fa-clipboard-list mr-3 text-blue-500"></i> Latest Request

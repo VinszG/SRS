@@ -104,8 +104,9 @@
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <h1 class="text-3xl text-black pb-6">Create New Request</h1>
-
+                <a class="text-3xl text-black pb-6" href="{{ route('user.requests.store') }}">
+                    Create New Request
+                </a>
                 <div class="w-full mt-12">
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <form method="POST" action="{{ route('user.requests.store') }}" enctype="multipart/form-data">

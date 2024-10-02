@@ -125,8 +125,8 @@
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <a href="{{ route('user.requests.index') }}">
-                    <h1 class="text-3xl text-black pb-6">History</h1>
+                <a class="text-3xl text-black pb-6" href="{{ route('user.requests.index') }}">
+                    History
                 </a>
                 <div class="w-full mt-12">
                     <p class="text-2xl font-semibold pb-4 flex items-center">

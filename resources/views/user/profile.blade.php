@@ -104,27 +104,46 @@
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
                 <h1 class="text-3xl text-black pb-6">User Profile</h1>
-
-                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
-                    <div class="-mx-3 md:flex mb-6">
-                        <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="name">
-                                Name
-                            </label>
-                            <p class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3">
-                                {{ $user->name }}
-                            </p>
-                        </div>
-                        <div class="md:w-1/2 px-3">
-                            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="email">
-                                Email
-                            </label>
-                            <p class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                                {{ $user->email }}
-                            </p>
-                        </div>
+    
+                @if (session('success'))
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <span class="block sm:inline">{{ session('success') }}</span>
                     </div>
-                    <!-- Add more user details here as needed -->
+                @endif
+    
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
+                    <form action="{{ route('user.profile.update') }}" method="POST">
+                        @csrf
+                        <div class="-mx-3 md:flex mb-6">
+                            <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="name">
+                                    Name
+                                </label>
+                                <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3" id="name" type="text" name="name" value="{{ old('name', $user->name) }}">
+                                @error('name')
+                                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="md:w-1/2 px-3">
+                                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="email">
+                                    Email
+                                </label>
+                                <p class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                    {{ $user->email }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="md:flex md:items-center justify-between">
+                            <div class="md:w-1/3">
+                                <button class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit">
+                                    Update Profile
+                                </button>
+                            </div>
+                            <a href="{{ route('account.user.dashboard') }}" class="ml-auto bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
                 </div>
             </main>
         </div>
