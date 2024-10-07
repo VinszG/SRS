@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect()->route('account.login');
 });
-
+ 
 // Public routes
 Route::group(['prefix' => 'account'], function() {
     Route::get('login', [LoginController::class, 'index'])->name('account.login');

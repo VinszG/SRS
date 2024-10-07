@@ -27,6 +27,17 @@
         .notification.show {
             opacity: 1;
         }
+        /* Menjaga warna teks hijau saat autofill */
+        input:-webkit-autofill {
+            -webkit-text-fill-color: #eb5b00; /* Hijau */
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* Menghilangkan hover effect */
+        input:hover {
+            transform: none; /* Menghilangkan scale pada hover */
+            box-shadow: none; /* Menghilangkan shadow pada hover */
+        }
     </style>
 </head>
 
@@ -83,7 +94,7 @@
                             {{-- Masukan Email --}}
                             <div class="input-container shadow-md rounded-lg bg-[#e9e7e7] flex flex-col items-start justify-between p-3 transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
                                 <div class="flex flex-row items-center justify-between w-full">
-                                    <input type="text" value="{{ old('email') }}"
+                                    <input type="text" value="{{ old('email') }}" autocomplete="off"
                                         class="flex-1 border-none outline-none bg-transparent h-8 font-['Istok_Web'] text-lg text-orange-500 placeholder-orange-600 @error('email') border-red-500 @enderror"
                                         name="email" id="email" placeholder="Masukan Email Anda">
                                     <img class="h-8 w-8 relative z-10" loading="lazy" alt=""
@@ -94,7 +105,7 @@
                             {{-- Masukan Password --}}
                             <div class="input-container shadow-md rounded-lg bg-[#e9e7e7] flex flex-col items-start justify-between p-3 transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
                                 <div class="flex flex-row items-center justify-between w-full">
-                                    <input type="password"
+                                    <input type="password" autocomplete="off"
                                         class="flex-1 border-none outline-none bg-transparent h-8 font-['Istok_Web'] text-lg text-orange-600 placeholder-orange-600 @error('password') border-red-600 @enderror"
                                         name="password" id="password" placeholder="Masukan Password Anda">
                                     <img id="togglePassword" class="h-8 w-8 relative z-10 cursor-pointer" alt=""
@@ -109,7 +120,7 @@
                                 <a href="{{ route('account.register') }}"
                                     class="relative inline-block min-w-[66px] whitespace-nowrap z-[1]">Sign
                                     Up</a>
-                                <a href="/lupaPw" class="relative z-[1]">Lupa Password?</a>
+                                <a href="#" class="relative z-[1]">Lupa Password?</a>
                             </div>
                         </div>
 

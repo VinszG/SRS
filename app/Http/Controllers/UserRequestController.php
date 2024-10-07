@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class UserRequestController extends Controller
 {
@@ -23,8 +24,6 @@ class UserRequestController extends Controller
         return view('user.requests.index', compact('requests'));
     }
 
-
-
     public function create()
     {
         return view('user.requests.create');
@@ -36,7 +35,7 @@ class UserRequestController extends Controller
             'name' => 'required',
             'departemen' => 'required',
             'jabatan' => 'required',
-            'request_date' => 'required|date',
+            'request_date' => 'required|date_format:Y-m-d\TH:i',
             'deskripsi_permasalahan' => 'required',
             'bukti_foto' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
         ]);
@@ -62,16 +61,9 @@ class UserRequestController extends Controller
     private function generateUniqueBpjNumber()
     {
         do {
-            // Generate angka random antara 1 dan 999 (menghindari 000)
             $randomNumber = mt_rand(1, 999);
-            
-            // Format nomor dengan padding nol di depan
             $formattedNumber = str_pad($randomNumber, 3, '0', STR_PAD_LEFT);
-            
-            // Buat nomor BPJ lengkap
             $number = 'BPJ-0' . $formattedNumber;
-            
-            // Cek apakah nomor sudah ada di database
             $exists = UserRequest::where('no_bpj', $number)->exists();
         } while ($exists);
 

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('departemen');
             $table->string('jabatan');
-            $table->date('request_date');
+            $table->dateTime('request_date');
             $table->text('deskripsi_permasalahan');
             $table->string('bukti_foto')->nullable();
             $table->enum('jenis', ['urgent', 'non-urgent'])->default('non-urgent');

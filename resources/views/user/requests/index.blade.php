@@ -62,7 +62,7 @@
                 History Request
             </a>
         </nav>
-        <a href="dashboard" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
+        <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
             <i class="fas fa-arrow-circle-up mr-3"></i>
             Service Request System
         </a>
@@ -196,9 +196,9 @@
                                                         <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Non-Urgent</span>
                                                     @endif
                                                 </td>
-                                                <td class="py-3 px-6 text-center whitespace-nowrap">
-                                                    <span>{{ $request->request_date->format('d/m/Y') }}</span>
-                                                </td>
+                                                <td class="py-3 px-6 text-center">
+                                                    <span>{{ $request->request_date->format('d/m/Y') }} | Jam {{ $request->request_date->format('H:i') }}</span>
+                                                </td>                                                
                                                 <td class="py-3 px-6 text-center whitespace-nowrap">
                                                     @switch($request->status)
                                                         @case('Pending')

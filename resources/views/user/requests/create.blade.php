@@ -43,7 +43,7 @@
                 History Request
             </a>
         </nav>
-        <a href="dashboard" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
+        <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
             <i class="fas fa-arrow-circle-up mr-3"></i>
             Service Request System
         </a>
@@ -138,8 +138,8 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <label for="request_date" class="block text-gray-700 text-sm font-bold mb-2">Request Date</label>
-                                    <input id="request_date" type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('request_date') border-red-500 @enderror" name="request_date" value="{{ old('request_date') }}" required>
+                                    <label for="request_date" class="block text-gray-700 text-sm font-bold mb-2">Request Date & Time</label>
+                                    <input id="request_date" type="datetime-local" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('request_date') border-red-500 @enderror" name="request_date" value="{{ old('request_date') }}" required>
                                     @error('request_date')
                                         <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
                                     @enderror

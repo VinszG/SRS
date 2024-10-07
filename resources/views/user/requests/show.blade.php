@@ -49,7 +49,7 @@
                 History Request
             </a>
         </nav>
-        <a href="dashboard" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
+        <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
             <i class="fas fa-arrow-circle-up mr-3"></i>
             Service Request System
         </a>
@@ -150,7 +150,7 @@
                         
                         <div>
                             <p class="text-gray-700 font-bold mb-2">Request Date:</p>
-                            <p class="text-gray-600">{{ $request->request_date->format('d/m/Y') }}</p>
+                            <p class="text-gray-600">{{ $request->request_date->format('d/m/Y') }} | Jam {{ $request->request_date->format('H:i') }}</p>
                         </div>
                     </div>
                     

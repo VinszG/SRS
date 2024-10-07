@@ -23,6 +23,6 @@ class UserRequest extends Model
     ];
 
     protected $casts = [
-        'request_date' => 'date',
+        'request_date' => 'datetime',
     ];
 }
