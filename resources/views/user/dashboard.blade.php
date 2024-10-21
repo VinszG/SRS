@@ -33,9 +33,39 @@
             white-space: pre-wrap;
             word-break: break-word;
         }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        @keyframes glow {
+        0%, 100% { box-shadow: 0 0 5px #8b5cf6, 0 0 10px #8b5cf6, 0 0 15px #8b5cf6; }
+        50% { box-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #8b5cf6; }
+        }
+
+        #loginSuccessNotification > div {
+            animation: glow 2s infinite;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-family-inter flex">
+
+    @if (session('loginSuccess'))
+        <div id="loginSuccessNotification" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0 transition-opacity duration-500">
+            <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
+                <div class="bg-gray-900 text-white p-6 rounded-lg flex flex-col items-center">
+                    <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h2 class="text-2xl font-bold mb-2">Welcome Back, {{ Auth::user()->name }}!</h2>
+                    <p class="text-gray-300 text-center">{{ session('loginSuccess') }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+
 
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
@@ -46,12 +76,12 @@
         </div>
         <nav class="text-white text-base font-semibold pt-3">
             <a href="{{ route('account.user.dashboard') }}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
-                <i class="fas fa-tachometer-alt mr-3"></i>
+                <i class="fas fa-home mr-3"></i>
                 Dashboard
             </a>
             <br>
             <a href="{{ route('user.requests.index') }}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
-                <i class="fas fa-tachometer-alt mr-3"></i>
+                <i class="fas fa-clipboard mr-3"></i>
                 History Request
             </a>
         </nav>
@@ -177,7 +207,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-left">
-                                                    <div class="flex flex-col items-start">
+                                                    <div class="flex flex-col items-start">   
                                                         <div class="truncate-text w-full" id="text-{{ $request->id }}">{{ $request->deskripsi_permasalahan }}</div>
                                                         <button onclick="toggleExpand('{{ $request->id }}')" class="text-blue-500 hover:text-blue-700 text-xs mt-1 focus:outline-none" id="btn-{{ $request->id }}">
                                                             Read more
@@ -250,6 +280,22 @@
                 btnElement.textContent = 'Read more';
             }
         }
+
+        function showNotification() {
+        const notification = document.getElementById('loginSuccessNotification');
+        notification.classList.remove('opacity-0');
+        notification.classList.add('opacity-100');
+        
+        setTimeout(() => {
+            notification.classList.remove('opacity-100');
+            notification.classList.add('opacity-0');
+            setTimeout(() => {
+                notification.remove();
+            }, 500);
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', showNotification);
     </script>
 </body>
 </html>

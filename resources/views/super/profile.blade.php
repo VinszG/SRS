@@ -57,8 +57,8 @@
 
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
-            <a href="dashboard" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">SPV</a>
-            <a href="{{ route('super.request.index') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center no-underline">
+            <a href="dashboard" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Supervisor</a>
+            <a href="#" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center no-underline">
                 <i class="fas fa-list mr-3"></i> Request List
             </a>
         </div>
@@ -141,48 +141,46 @@
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <a class="text-3xl text-black pb-6" href="{{ route('super.dashboard') }}">
-                    Dashboard
-                </a>
-                <div class="w-full mt-12">
-                    <p class="text-2xl font-semibold pb-4 flex items-center">
-                        <i class="fas fa-clipboard-list mr-3 text-blue-500"></i> Latest Request
-                    </p>
-                    <form action="{{ route('super.dashboard') }}" method="GET" class="mb-4">
-                        <div class="flex items-center">
-                            <div class="relative w-full">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                    </svg>
-                                </div>
-                                <input type="text" name="search" id="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Cari berdasarkan No. BPJ atau Deskripsi" value="{{ request('search') }}">
+                <h1 class="text-3xl text-black pb-6">User Profile</h1>
+    
+                @if (session('success'))
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <span class="block sm:inline">{{ session('success') }}</span>
+                    </div>
+                @endif
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
+                    <form action="{{ route('super.profile.update') }}" method="POST">
+                        @csrf
+                        <div class="-mx-3 md:flex mb-6">
+                            <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="name">
+                                    Name
+                                </label>
+                                <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3" id="name" type="text" name="name" value="{{ old('name', $user->name) }}">
+                                @error('name')
+                                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                                @enderror
                             </div>
-                            <button type="submit" class="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                                <span class="sr-only">Search</span>
-                            </button>
+                            <div class="md:w-1/2 px-3">
+                                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="email">
+                                    Email
+                                </label>
+                                <p class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                    {{ $user->email }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="md:flex md:items-center justify-between">
+                            <div class="md:w-1/3">
+                                <button class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit">
+                                    Update Profile
+                                </button>
+                            </div>
+                            <a href="{{ route('super.dashboard') }}" class="ml-auto bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                Back to Dashboard
+                            </a>
                         </div>
                     </form>
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                        <div class="overflow-x-auto max-h-96">
-                            <table class="w-full table-auto">
-                                <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal sticky top-0">
-                                    <tr>
-                                        <th class="py-3 px-6 text-left whitespace-nowrap">No. BPJ</th>
-                                        <th class="py-3 px-6 text-left">Nama</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Departemen</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Jabatan</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Tanggal Dibuat</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Permasalahan</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Bukti Foto</th>
-                                    </tr>
-                                </thead>    
-                            </table>
-                        </div>
-                    </div>
                 </div>
             </main>
         </div>

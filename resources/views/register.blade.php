@@ -11,130 +11,165 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" />
         @vite('resources/css/app.css')
+        <style>
+            .notification {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 1000;
+                width: auto;
+                max-width: 90%;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+            }
+            .notification.show {
+                opacity: 1;
+            }
+        </style>
     </head>
     <body>
+        <!-- Popup Notifications -->
+        @if ($errors->any())
+            <div id="errorNotification" class="notification bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-md mb-4 text-center">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div id="successNotification" class="notification bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-md mb-4 text-center">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="w-full relative bg-[#e1e1e1] overflow-hidden flex flex-row items-start justify-center py-[47px] pl-[24px] pr-[20px] box-border leading-[normal] tracking-[normal]">
             <main class="w-[1264px] h-[655px] shadow-[10px_10px_10px_rgba(0,_0,_0,_0.25)] rounded-[50px] bg-[#fff] flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px] box-border relative gap-[87px] max-w-full text-left text-[25px] text-[rgba(255,255,255,0.8)] font-['Istok_Web'] mq725:gap-[43px] mq450:gap-[22px] mq1050:flex-wrap mq1050:pl-[20px] mq1050:pr-[20px] mq1050:pb-[20px] mq1050:box-border">
                 <div class="self-stretch w-[1264px] relative shadow-[10px_10px_10px_rgba(0,_0,_0,_0.25)] rounded-[50px] bg-[#fff] hidden max-w-full z-[0]"></div>
-                    <div class="w-[513px] flex flex-col items-start justify-start pt-[37px] px-[0px] pb-[0px] box-border min-w-[513px] max-w-full mq725:min-w-full mq1050:flex-1">
+                <div class="w-[513px] flex flex-col items-start justify-start pt-[37px] px-[0px] pb-[0px] box-border min-w-[513px] max-w-full mq725:min-w-full mq1050:flex-1">
+                    <form class="m-[0px] self-stretch flex flex-col items-start justify-start gap-[26px] max-w-full" action="{{ route('processRegister') }}" method="post">
+                        @csrf
                         
-                                <form class="m-[0px] self-stretch flex flex-col items-start justify-start gap-[26px] max-w-full" action="{{ route('processRegister') }}" method="post">
-                                    
-                                    <div class="flex flex-row items-start justify-start gap-[46px] pl-[20px] max-w-full mq725:flex-wrap mq450:gap-[23px]">
-                                        <a href="{{ route('account.login') }}" class="cursor-pointer [border:none] py-[8px] pl-[15px] pr-[11px] bg-[#eb5b00] shadow-[4px_4px_4px_rgba(0,_0,_0,_0.25)] rounded-[20px] flex flex-row items-start justify-start z-[1] link-secondary text-decoration-none">
-                                            <div class="h-[15px] relative text-[18px] font-medium font-['Roboto_Serif'] text-[#fff] text-left inline-block [text-shadow:0px_4px_4px_rgba(0,_0,_0,_0.25)] min-w-[53px] z-[2]">Back</div>
-                                            <img class="h-[21px] w-[24px] relative overflow-hidden shrink-0 z-[1]" alt="" src="/images/skip-back.svg" />
-                                        </a>
-                                     </div>
-                                    
-                                    <div class="self-stretch flex flex-row items-start justify-end">
-                                        <h3 class="m-[0px] relative text-[30px] font-bold font-[Kadwa] text-transparent !bg-clip-text [background:linear-gradient(90deg,_#eb5b00,_#ff0000)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] text-left z-[1] mq450:text-[18px] mq1000:text-[24px]">
-                                            Ayo Buat Akun Kamu Sendiri
-                                        </h3>
-                                    </div>
+                        <div class="flex flex-row items-start justify-start gap-[46px] pl-[20px] max-w-full mq725:flex-wrap mq450:gap-[23px]">
+                            <a href="{{ route('account.login') }}" class="cursor-pointer [border:none] py-[8px] pl-[15px] pr-[11px] bg-[#eb5b00] shadow-[4px_4px_4px_rgba(0,_0,_0,_0.25)] rounded-[20px] flex flex-row items-start justify-start z-[1] link-secondary text-decoration-none">
+                                <div class="h-[15px] relative text-[18px] font-medium font-['Roboto_Serif'] text-[#fff] text-left inline-block [text-shadow:0px_4px_4px_rgba(0,_0,_0,_0.25)] min-w-[53px] z-[2]">Back</div>
+                                <img class="h-[21px] w-[24px] relative overflow-hidden shrink-0 z-[1]" alt="" src="/images/skip-back.svg" />
+                            </a>
+                         </div>
+                        
+                        <div class="self-stretch flex flex-row items-start justify-end">
+                            <h3 class="m-[0px] relative text-[30px] font-bold font-[Kadwa] text-transparent !bg-clip-text [background:linear-gradient(90deg,_#eb5b00,_#ff0000)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] text-left z-[1] mq450:text-[18px] mq1000:text-[24px]">
+                                Ayo Buat Akun Kamu Sendiri
+                            </h3>
+                        </div>
 
-                                    @csrf
-                                    
-                                    {{-- Masukan Nama --}}
-                                    <div class="self-stretch flex flex-row items-start justify-end pt-[0px] px-[16px] pb-[8px] box-border max-w-full">
-                                        <div class="w-[429px] shadow-md rounded-lg bg-[#e9e7e7] flex flex-row items-center justify-between py-[10px] pl-[18px] pr-[12px] box-border gap-[10px] max-w-full z-[1] transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
-                                            <input type="text" value="{{ old('name') }}"
-                                            w    class="w-full border-none outline-none font-['Istok_Web'] text-lg bg-transparent h-8 text-orange-500 placeholder-orange-600 z-[1] mq450:text-[16px] form-control @error('name') border-red-500 @enderror"
-                                                name="name" id="name" placeholder="Masukan Nama Anda" autocomplete="off" autofocus>
-                                            <div class="flex flex-col items-center justify-center">
-                                                <img class="w-[25px] h-[25px] relative z-[2]" alt="" src="/images/user.svg" />
-                                            </div>
-                                            @error('name')
-                                                <p class="invalid-feedback">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    {{-- Masukan Email --}}
-                                    <div class="self-stretch flex flex-row items-start justify-end pt-[0px] px-[16px] pb-[8px] box-border max-w-full">
-                                        <div class="w-[429px] shadow-md rounded-lg bg-[#e9e7e7] flex flex-row items-center justify-between py-[10px] pl-[18px] pr-[12px] box-border gap-[10px] max-w-full z-[1] transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
-                                            <input type="text" value="{{ old('email') }}"
-                                                class="w-full border-none outline-none font-['Istok_Web'] text-lg bg-transparent h-8 text-orange-500 placeholder-orange-600 z-[1] mq450:text-[16px] form-control @error('email') border-red-500 @enderror"
-                                                name="email" id="email" placeholder="Masukan Email Anda" autocomplete="off" autofocus>
-                                            <div class="flex flex-col items-center justify-center">
-                                                <img class="w-[25px] h-[25px] relative z-[2]" alt="" src="/images/user-check.svg" />
-                                            </div>
-                                            @error('email')
-                                                <p class="invalid-feedback">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    {{-- Masukan Password --}}
-                                    <div class="self-stretch flex flex-row items-start justify-end pt-[0px] px-[16px] pb-[8px] box-border max-w-full">
-                                        <div class="w-[429px] shadow-md rounded-lg bg-[#e9e7e7] flex flex-row items-center justify-between py-[10px] pl-[18px] pr-[12px] box-border gap-[10px] max-w-full z-[1] transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
-                                            <input type="password"
-                                                class="w-full border-none outline-none font-['Istok_Web'] text-lg bg-transparent h-8 text-orange-500 placeholder-orange-600 z-[1] mq450:text-[16px] form-control @error('password') border-red-500 @enderror"
-                                                name="password" id="password" placeholder="Masukan Password Anda" autocomplete="off">
-                                            <div class="flex flex-col items-center justify-center">
-                                                <img id="togglePassword" class="w-[25px] h-[25px] relative z-[2] cursor-pointer" alt="" src="/images/eye-off.svg" />
-                                            </div>
-                                            @error('password')
-                                                <p class="invalid-feedback">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    {{-- Konfirmasi Password --}}
-                                    <div class="self-stretch flex flex-row items-start justify-end pt-[0px] px-[16px] pb-[8px] box-border max-w-full">
-                                        <div class="w-[429px] shadow-md rounded-lg bg-[#e9e7e7] flex flex-row items-center justify-between py-[10px] pl-[18px] pr-[12px] box-border gap-[10px] max-w-full z-[1] transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
-                                            <input type="password"
-                                                class="w-full border-none outline-none font-['Istok_Web'] text-lg bg-transparent h-8 text-orange-500 placeholder-orange-600 z-[1] mq450:text-[16px] form-control"
-                                                name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" autocomplete="off">
-                                            <div class="flex flex-col items-center justify-center">
-                                                <img id="toggleConfirmPassword" class="w-[25px] h-[25px] relative z-[2] cursor-pointer" alt="" src="/images/eye-off.svg" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                        <div class="self-stretch flex flex-row items-start justify-end py-[0px] px-[16px] box-border max-w-full">
-                                            <div class="w-[429px] flex flex-col items-start justify-start gap-[17px] max-w-full">
-                                                <button class="cursor-pointer border-[#c00f0c] border-[1px] border-solid p-[20px] bg-[#eb5b00] self-stretch shadow-[4px_4px_4px_1px_rgba(0,_0,_0,_0.25)] rounded-[30px] overflow-hidden flex flex-row items-start justify-center gap-[8px] z-[1]" type="submit">
-                                                    <img class="h-[16px] w-[16px] relative overflow-hidden shrink-0 hidden min-h-[16px]" alt="" src="/public/star.svg" />
-                                                    <div class="relative text-[16px] leading-[100%] font-[Inter] text-[#fee9e7] text-left inline-block min-w-[40px]">Kirim</div>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                </form>
-
-                            </div>
-
-                            <div class="flex-1 h-[655px] rounded-tl-[0px] rounded-tr-[50px] rounded-br-[50px] rounded-bl-[0px] flex flex-row items-start justify-start bg-[url('/public/images/japfa.jpg')] bg-cover bg-no-repeat bg-[top] min-w-[411px] max-w-full z-[1] text-[25px] text-[rgba(255,255,255,0.8)] font-['Istok_Web'] mq750:min-w-full">
-                                <div class="h-[655px] flex-1 relative rounded-tl-[0px] rounded-tr-[50px] rounded-br-[50px] rounded-bl-[0px] bg-[#eb5b00] overflow-hidden opacity-[0.8] max-w-full z-[2]">
-                                    <b class="absolute top-[386px] left-[196px] inline-block w-[261px] mq450:text-[20px]">PT. Ciomas Adisatwa</b>
-                                    <img class="absolute top-[243px] left-[36px] w-[559px] h-[162px] object-cover z-[1]" loading="lazy" alt="" src="/images/tulisanJapfa.png" />
+                        {{-- Masukan Nama --}}
+                        <div class="self-stretch flex flex-row items-start justify-end pt-[0px] px-[16px] pb-[8px] box-border max-w-full">
+                            <div class="w-[429px] shadow-md rounded-lg bg-[#e9e7e7] flex flex-row items-center justify-between py-[10px] pl-[18px] pr-[12px] box-border gap-[10px] max-w-full z-[1] transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
+                                <input type="text" value="{{ old('name') }}"
+                                    class="w-full border-none outline-none font-['Istok_Web'] text-lg bg-transparent h-8 text-orange-500 placeholder-orange-600 z-[1] mq450:text-[16px] form-control @error('name') border-red-500 @enderror"
+                                    name="name" id="name" placeholder="Masukan Nama Anda" autocomplete="off" autofocus>
+                                <div class="flex flex-col items-center justify-center">
+                                    <img class="w-[25px] h-[25px] relative z-[2]" alt="" src="/images/user.svg" />
                                 </div>
                             </div>
-                            
-                        </main>
+                        </div>
+
+                        {{-- Masukan Email --}}
+                        <div class="self-stretch flex flex-row items-start justify-end pt-[0px] px-[16px] pb-[8px] box-border max-w-full">
+                            <div class="w-[429px] shadow-md rounded-lg bg-[#e9e7e7] flex flex-row items-center justify-between py-[10px] pl-[18px] pr-[12px] box-border gap-[10px] max-w-full z-[1] transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
+                                <input type="text" value="{{ old('email') }}"
+                                    class="w-full border-none outline-none font-['Istok_Web'] text-lg bg-transparent h-8 text-orange-500 placeholder-orange-600 z-[1] mq450:text-[16px] form-control @error('email') border-red-500 @enderror"
+                                    name="email" id="email" placeholder="Masukan Email Anda" autocomplete="off" autofocus>
+                                <div class="flex flex-col items-center justify-center">
+                                    <img class="w-[25px] h-[25px] relative z-[2]" alt="" src="/images/user-check.svg" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Masukan Password --}}
+                        <div class="self-stretch flex flex-row items-start justify-end pt-[0px] px-[16px] pb-[8px] box-border max-w-full">
+                            <div class="w-[429px] shadow-md rounded-lg bg-[#e9e7e7] flex flex-row items-center justify-between py-[10px] pl-[18px] pr-[12px] box-border gap-[10px] max-w-full z-[1] transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
+                                <input type="password"
+                                    class="w-full border-none outline-none font-['Istok_Web'] text-lg bg-transparent h-8 text-orange-500 placeholder-orange-600 z-[1] mq450:text-[16px] form-control @error('password') border-red-500 @enderror"
+                                    name="password" id="password" placeholder="Masukan Password Anda" autocomplete="off">
+                                <div class="flex flex-col items-center justify-center">
+                                    <img id="togglePassword" class="w-[25px] h-[25px] relative z-[2] cursor-pointer" alt="" src="/images/eye-off.svg" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Konfirmasi Password --}}
+                        <div class="self-stretch flex flex-row items-start justify-end pt-[0px] px-[16px] pb-[8px] box-border max-w-full">
+                            <div class="w-[429px] shadow-md rounded-lg bg-[#e9e7e7] flex flex-row items-center justify-between py-[10px] pl-[18px] pr-[12px] box-border gap-[10px] max-w-full z-[1] transition-all duration-300 ease-in-out hover:shadow-orange-200 hover:scale-105">
+                                <input type="password"
+                                    class="w-full border-none outline-none font-['Istok_Web'] text-lg bg-transparent h-8 text-orange-500 placeholder-orange-600 z-[1] mq450:text-[16px] form-control"
+                                    name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" autocomplete="off">
+                                <div class="flex flex-col items-center justify-center">
+                                    <img id="toggleConfirmPassword" class="w-[25px] h-[25px] relative z-[2] cursor-pointer" alt="" src="/images/eye-off.svg" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="self-stretch flex flex-row items-start justify-end py-[0px] px-[16px] box-border max-w-full">
+                            <div class="w-[429px] flex flex-col items-start justify-start gap-[17px] max-w-full">
+                                <button class="cursor-pointer border-[#c00f0c] border-[1px] border-solid p-[20px] bg-[#eb5b00] self-stretch shadow-[4px_4px_4px_1px_rgba(0,_0,_0,_0.25)] rounded-[30px] overflow-hidden flex flex-row items-start justify-center gap-[8px] z-[1]" type="submit">
+                                    <img class="h-[16px] w-[16px] relative overflow-hidden shrink-0 hidden min-h-[16px]" alt="" src="/public/star.svg" />
+                                    <div class="relative text-[16px] leading-[100%] font-[Inter] text-[#fee9e7] text-left inline-block min-w-[40px]">Kirim</div>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                {{-- Side Logo --}}
+                <div class="flex-1 rounded-tl-[0px] rounded-tr-[50px] rounded-br-[50px] rounded-bl-[0px] flex flex-row items-start justify-start bg-[url('/public/images/japfa.jpg')] bg-cover bg-no-repeat bg-[top] min-w-[411px] max-w-full z-[1] text-[22px] text-[rgba(255,255,255,0.8)] font-['Istok_Web'] mq750:min-w-full">
+                    <div class="h-[657px] flex-1 relative rounded-tl-[0px] rounded-tr-[50px] rounded-br-[50px] rounded-bl-[0px] bg-[#eb5b00] overflow-hidden opacity-[0.8] max-w-full z-[2]">
+                        <img class="absolute top-[218px] left-[70px] w-[503px] h-[130px] object-cover z-[1]" loading="lazy" alt="" src="/images/tulisanJapfa.png" />
+                        <b class="absolute top-[350px] left-[215px] inline-block w-[235px] mq450:text-[18px]">PT. Ciomas Adisatwa</b>
                     </div>
-
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                        const togglePassword = document.getElementById('togglePassword');
-                        const password = document.getElementById('password');
-                        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-                        const confirmPassword = document.getElementById('password_confirmation');  // Ubah ini
-
-                        togglePassword.addEventListener('click', function () {
-                            const type = password.type === 'password' ? 'text' : 'password';
-                            password.type = type;
-                            togglePassword.src = type === 'password' ? '/images/eye-off.svg' : '/images/eye.svg';
-                        });
-
-                        toggleConfirmPassword.addEventListener('click', function () {
-                            const type = confirmPassword.type === 'password' ? 'text' : 'password';
-                            confirmPassword.type = type;
-                            toggleConfirmPassword.src = type === 'password' ? '/images/eye-off.svg' : '/images/eye.svg';
-                        });
-                    });
-
-                    </script>
+                </div>
+                
+            </main>
+        </div>
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const togglePassword = document.getElementById('togglePassword');
+                const password = document.getElementById('password');
+                const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+                const confirmPassword = document.getElementById('password_confirmation');
+    
+                togglePassword.addEventListener('click', function () {
+                    const type = password.type === 'password' ? 'text' : 'password';
+                    password.type = type;
+                    togglePassword.src = type === 'password' ? '/images/eye-off.svg' : '/images/eye.svg';
+                });
+    
+                toggleConfirmPassword.addEventListener('click', function () {
+                    const type = confirmPassword.type === 'password' ? 'text' : 'password';
+                    confirmPassword.type = type;
+                    toggleConfirmPassword.src = type === 'password' ? '/images/eye-off.svg' : '/images/eye.svg';
+                });
+            });
+    
+            // Show and hide notifications
+            function showNotification(elementId) {
+                const notification = document.getElementById(elementId);
+                if (notification) {
+                    notification.classList.add('show');
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                    }, 5000); // Hide after 5 seconds
+                }
+            }
+    
+            // Show notifications on page load
+            window.addEventListener('load', () => {
+                showNotification('errorNotification');
+                showNotification('successNotification');
+            });
+        </script>
     </body>
-</html>
+    </html>

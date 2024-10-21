@@ -9,13 +9,13 @@ class SuperRequestController extends Controller
 {
     public function index()
     {
-        $requests = UserRequest::where('status', 'pending')->get();
-        return view('super.requests.index', compact('requests'));
+        $request = UserRequest::where('status', 'pending')->get();
+        return view('super.request.index', compact('request'));
     }
 
     public function show(UserRequest $request)
     {
-        return view('super.requests.show', compact('request'));
+        return view('super.request.show', compact('request'));
     }
 
     public function updateJenis(Request $request, UserRequest $userRequest)
@@ -32,6 +32,6 @@ class SuperRequestController extends Controller
             // Kirim notifikasi ke Plant Manager
         }
 
-        return redirect()->route('super.requests.index')->with('success', 'Jenis request berhasil diupdate.');
+        return redirect()->route('super.request.index')->with('success', 'Jenis request berhasil diupdate.');
     }
 }

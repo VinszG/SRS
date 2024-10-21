@@ -12,7 +12,7 @@ class TeknisiRequestController extends Controller
         $requests = UserRequest::where('teknisi_id', auth('teknisi')->id())->get();
         return view('teknisi.requests.index', compact('requests'));
     }
-
+        
     public function show(UserRequest $request)
     {
         return view('teknisi.requests.show', compact('request'));

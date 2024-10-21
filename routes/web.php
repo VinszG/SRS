@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\PlantDashboardController;
 use App\Http\Controllers\SuperDashboardController;
+use App\Http\Controllers\SuperRequestController;
 use App\Http\Controllers\TeknisiDashboardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
@@ -20,6 +21,10 @@ Route::group(['prefix' => 'account'], function() {
     Route::get('register', [LoginController::class, 'register'])->name('account.register');
     Route::post('process-register', [LoginController::class, 'processRegister'])->name('processRegister');
     Route::post('authenticate', [LoginController::class, 'authenticate'])->name('account.authenticate');
+    Route::get('forgot-password', [LoginController::class, 'showForgotPasswordForm'])->name('password.request');
+    Route::post('forgot-password', [LoginController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('reset-password/{token}', [LoginController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [LoginController::class, 'resetPassword'])->name('password.update');
 });
 
 // Protected routes
@@ -47,9 +52,14 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function() {
         Route::get('plant/dashboard', [PlantDashboardController::class, 'index'])->name('plant.dashboard');
     });
 
-    // Super routes
+    // Super routes 
     Route::group(['middleware' => 'role:super'], function() {
         Route::get('super/dashboard', [SuperDashboardController::class, 'index'])->name('super.dashboard');
+        Route::get('/super/request', [SuperRequestController::class, 'index'])->name('super.request.index');
+        Route::get('/super/request/{request}', [SuperRequestController::class, 'show'])->name('super.request.show');
+        Route::patch('/super/request/{request}/update-jenis', [SuperRequestController::class, 'updateJenis'])->name('super.request.updateJenis');
+        Route::get('/super/profile', [SuperDashboardController::class, 'profile'])->name('super.profile');
+        Route::post('/super/profile/update', [SuperDashboardController::class, 'updateProfile'])->name('super.profile.update');
     });
 
     // Teknisi routes
