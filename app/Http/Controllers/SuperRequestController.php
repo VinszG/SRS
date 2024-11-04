@@ -9,14 +9,22 @@ class SuperRequestController extends Controller
 {
     public function index()
     {
-        $request = UserRequest::where('status', 'pending')->get();
-        return view('super.request.index', compact('request'));
+        // Mengambil request dengan status 'spv' dan jenis 'supervisor'
+        $requests = UserRequest::where([
+            ['status', '=', 'spv'],
+            ['jenis', '=', 'supervisor']
+        ])
+        ->orderBy('request_date', 'desc')
+        ->paginate(10);
+
+        // Pastikan view menerima variable $requests
+        return view('super.dashboard', compact('requests'));
     }
 
     public function show(UserRequest $request)
     {
         return view('super.request.show', compact('request'));
-    }
+    }   
 
     public function updateJenis(Request $request, UserRequest $userRequest)
     {
@@ -24,14 +32,12 @@ class SuperRequestController extends Controller
             'jenis' => 'required|in:urgent,non-urgent',
         ]);
 
-        $userRequest->jenis = $validatedData['jenis'];
-        $userRequest->status = $validatedData['jenis'] === 'urgent' ? 'ongoing' : 'pending';
-        $userRequest->save();
+        $userRequest->update([
+            'jenis' => $validatedData['jenis'],
+            'status' => 'pending'
+        ]);
 
-        if ($validatedData['jenis'] === 'non-urgent') {
-            // Kirim notifikasi ke Plant Manager
-        }
-
-        return redirect()->route('super.request.index')->with('success', 'Jenis request berhasil diupdate.');
+        return redirect()->route('super.dashboard')
+            ->with('success', 'Status request berhasil diperbarui.');
     }
 }

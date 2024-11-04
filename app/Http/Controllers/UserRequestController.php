@@ -12,7 +12,7 @@ class UserRequestController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
+            
         $requests = UserRequest::where('user_id', Auth::id())
             ->when($search, function ($query, $search) {
                 return $query->where('no_bpj', 'like', "%{$search}%")
@@ -36,7 +36,7 @@ class UserRequestController extends Controller
             'departemen' => 'required',
             'jabatan' => 'required',
             'request_date' => 'required|date_format:Y-m-d\TH:i',
-            'deskripsi_permasalahan' => 'required',
+            'deskripsi_permasalahan' => 'required', 
             'bukti_foto' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
         ]);
 
@@ -46,7 +46,7 @@ class UserRequestController extends Controller
         // Generate nomor BPJ baru
         $userRequest->no_bpj = $this->generateUniqueBpjNumber();
         
-        $userRequest->status = 'pending';
+        $userRequest->status = 'spv';
 
         if ($request->hasFile('bukti_foto')) {
             $path = $request->file('bukti_foto')->store('bukti_foto', 'public');

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\PlantDashboardController;
+use App\Http\Controllers\PlantRequestController;
 use App\Http\Controllers\SuperDashboardController;
 use App\Http\Controllers\SuperRequestController;
 use App\Http\Controllers\TeknisiDashboardController;
@@ -45,19 +46,27 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function() {
     // Admin routes
     Route::group(['middleware' => 'role:admin'], function() {
         Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/admin/profile', [AdminDashboardController::class, 'profile'])->name('admin.profile');
+        Route::post('/admin/profile/update', [AdminDashboardController::class, 'updateProfile'])->name('admin.profile.update');
     });
 
     // Plant routes
     Route::group(['middleware' => 'role:plant'], function() {
         Route::get('plant/dashboard', [PlantDashboardController::class, 'index'])->name('plant.dashboard');
+        Route::get('/plant/profile', [PlantDashboardController::class, 'profile'])->name('plant.profile');
+        Route::post('/plant/profile/update', [PlantDashboardController::class, 'updateProfile'])->name('plant.profile.update');
     });
 
     // Super routes 
     Route::group(['middleware' => 'role:super'], function() {
-        Route::get('super/dashboard', [SuperDashboardController::class, 'index'])->name('super.dashboard');
+        Route::get('super/dashboard', [SuperRequestController::class, 'index'])->name('super.dashboard');
+
+        // Request routes
         Route::get('/super/request', [SuperRequestController::class, 'index'])->name('super.request.index');
         Route::get('/super/request/{request}', [SuperRequestController::class, 'show'])->name('super.request.show');
-        Route::patch('/super/request/{request}/update-jenis', [SuperRequestController::class, 'updateJenis'])->name('super.request.updateJenis');
+        Route::patch('/super/request/{userRequest}/jenis', [SuperRequestController::class, 'updateJenis'])->name('super.request.updateJenis');
+        
+        //Profile
         Route::get('/super/profile', [SuperDashboardController::class, 'profile'])->name('super.profile');
         Route::post('/super/profile/update', [SuperDashboardController::class, 'updateProfile'])->name('super.profile.update');
     });
@@ -65,5 +74,7 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function() {
     // Teknisi routes
     Route::group(['middleware' => 'role:teknisi'], function() {
         Route::get('teknisi/dashboard', [TeknisiDashboardController::class, 'index'])->name('teknisi.dashboard');
+        Route::get('/teknisi/profile', [TeknisiDashboardController::class, 'profile'])->name('teknisi.profile');
+        Route::post('/teknisi/profile/update', [TeknisiDashboardController::class, 'updateProfile'])->name('teknisi.profile.update');
     });
 });

@@ -101,13 +101,13 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
                                 Name
                             </label>
-                            <p class="text-gray-700 text-base">{{ $request->user->name }}</p>
+                            <p class="text-gray-700 text-base">{{ $request->name}}</p>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="department">
                                 Department
                             </label>
-                            <p class="text-gray-700 text-base">{{ $request->user->department }}</p>
+                            <p class="text-gray-700 text-base">{{ $request->department }}</p>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
@@ -131,6 +131,7 @@
                             <form action="{{ route('super.request.updateJenis', $request) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
+                                
                                 <div class="mb-4">
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="jenis">
                                         Update Jenis
@@ -140,10 +141,12 @@
                                         <option value="non-urgent">Non-Urgent</option>
                                     </select>
                                 </div>
-                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                     Update Jenis
                                 </button>
                             </form>
+                            
                             <a href="{{ route('super.request.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Back to List
                             </a>

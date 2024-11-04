@@ -58,9 +58,6 @@
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
             <a href="dashboard" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">SPV</a>
-            <a href="{{ route('super.request.index') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center no-underline">
-                <i class="fas fa-list mr-3"></i> Request List
-            </a>
         </div>
         <nav class="text-white text-base font-semibold pt-3">
             <a href="{{ route('super.dashboard') }}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
@@ -69,8 +66,8 @@
             </a>
             <br>
             <a href="#" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
-                <i class="fas fa-clipboard mr-3"></i>
-                History Request
+                <i class="fas  fa-clipboard mr-3"></i>
+                History Requesty
             </a>
         </nav>
         <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
@@ -146,7 +143,7 @@
                 </a>
                 <div class="w-full mt-12">
                     <p class="text-2xl font-semibold pb-4 flex items-center">
-                        <i class="fas fa-clipboard-list mr-3 text-blue-500"></i> Latest Request
+                        <i class="fas fa-clipboard-list mr-3 text-blue-500"></i> Daftar Request
                     </p>
                     <form action="{{ route('super.dashboard') }}" method="GET" class="mb-4">
                         <div class="flex items-center">
@@ -175,11 +172,42 @@
                                         <th class="py-3 px-6 text-left">Nama</th>
                                         <th class="py-3 px-6 text-center whitespace-nowrap">Departemen</th>
                                         <th class="py-3 px-6 text-center whitespace-nowrap">Jabatan</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Tanggal Dibuat</th>
                                         <th class="py-3 px-6 text-center whitespace-nowrap">Permasalahan</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Bukti Foto</th>
+                                        <th class="py-3 px-6 text-center whitespace-nowrap">Detail</th>
                                     </tr>
-                                </thead>    
+                                </thead>  
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach($requests as $request)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $request->no_bpj }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $request->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $request->departemen }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $request->jabatan }}</td>
+                                        <td class="px-6 py-4">{{ $request->deskripsi_permasalahan }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex space-x-2">
+                                                <form action="{{ route('super.request.updateJenis', $request) }}" method="POST">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="jenis" value="urgent">
+                                                    <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                                        Urgent
+                                                    </button>
+                                                </form>
+                    
+                                                <form action="{{ route('super.request.updateJenis', $request) }}" method="POST">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="jenis" value="non-urgent">
+                                                    <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                                                        Non-Urgent
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>  
                             </table>
                         </div>
                     </div>

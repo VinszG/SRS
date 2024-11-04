@@ -189,12 +189,16 @@
                                                         </button>
                                                     </div>
                                                 </td>
-                                                <td class="py-3 px-6 text-center whitespace-nowrap">
-                                                    @if(strtolower($request->jenis) == 'urgent')
-                                                        <span class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs">Urgent</span>
-                                                    @else
-                                                        <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Non-Urgent</span>
-                                                    @endif
+                                                <td class="py-3 px-6 text-center">
+                                                    <div class="flex justify-center">
+                                                        @if(strtolower($request->jenis) == 'urgent')
+                                                            <span class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs whitespace-nowrap">Urgent</span>
+                                                        @elseif(strtolower($request->jenis) == 'non-urgent')
+                                                            <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs whitespace-nowrap">Non-Urgent</span>
+                                                        @else
+                                                            <span class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs whitespace-nowrap">(SPV)</span>
+                                                        @endif
+                                                    </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
                                                     <span>{{ $request->request_date->format('d/m/Y') }} | Jam {{ $request->request_date->format('H:i') }}</span>
