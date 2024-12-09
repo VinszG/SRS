@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PlantDashboardController extends Controller
 {
-    // Menampilkan Dashboard Untuk Plant
-    public function index(){
-        return view('plant.dashboard');
+    public function index()
+    {
+        // Get ongoing requests with non-urgent type
+        $ongoingRequests = UserRequest::where([
+            ['status', '=', 'ongoing'],
+            ['jenis', '=', 'non-urgent']
+        ])->orderBy('created_at', 'desc')->get();
+
+        return view('plant.dashboard', compact('ongoingRequests'));
     }
+
 
     public function profile()
     {
@@ -20,11 +28,10 @@ class PlantDashboardController extends Controller
 
     public function updateProfile(Request $request)
     {
-
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
-
+        
         $user = Auth::user();
         $user->name = $request->name;
         $user->save();
@@ -32,3 +39,4 @@ class PlantDashboardController extends Controller
         return redirect()->route('plant.profile')->with('success', 'Profile updated successfully');
     }
 }
+    

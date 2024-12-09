@@ -22,16 +22,25 @@
         .nav-item:hover { background: #eb5b00; }
         .account-link:hover { background: #ff6200; }
         .truncate-text {
-            max-width: 300px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        max-width: 100%;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.5;
         }
+        
         .expanded {
-            white-space: pre-wrap;
+            white-space: normal;
             word-break: break-word;
+            max-width: 100%;
+            line-height: 1.5;
+        }
+
+        .description-cell {
+            max-width: 300px;
+            min-width: 250px;
         }
         .notification {
             position: fixed;
@@ -41,31 +50,45 @@
             max-width: 300px;
         }
         @keyframes glow {
-        0%, 100% { box-shadow: 0 0 5px #8b5cf6, 0 0 10px #8b5cf6, 0 0 15px #8b5cf6; }
-        50% { box-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #8b5cf6; }
+            0%, 100% { box-shadow: 0 0 5px #ff6200, 0 0 10px #ff6200, 0 0 15px #ff6200; }
+            50% { box-shadow: 0 0 10px #ff9400, 0 0 20px #ff9400, 0 0 30px #ff9400; }
         }
 
-        #loginSuccessNotification > div {
-            animation: glow 2s infinite;
+
+        #loginSuccessNotification {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: linear-gradient(to right, #ffb347, #ffcc33); /* Warna gaya Genshin */
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #loginSuccessNotification svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
         }
     </style>
 </head>
 <body class="bg-gray-100 font-family-inter flex">
 
     @if (session('loginSuccess'))
-        <div id="loginSuccessNotification" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0 transition-opacity duration-500">
-            <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
-                <div class="bg-gray-900 text-white p-6 rounded-lg flex flex-col items-center">
-                    <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <h2 class="text-2xl font-bold mb-2">Welcome Back, {{ Auth::user()->name }}!</h2>
-                    <p class="text-gray-300 text-center">{{ session('loginSuccess') }}</p>
-                </div>
-            </div>
+        <div id="loginSuccessNotification"> 
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Welcome Back, {{ Auth::user()->name }}! {{ session('loginSuccess') }}</span>
         </div>
     @endif
-
 
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
@@ -85,10 +108,10 @@
                 History Request
             </a>
         </nav>
-        <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
+        <a href="#" class="absolute w-full bottom-0 active-nav-link text-white flex items-center justify-center py-4 px-6 whitespace-nowrap text-sm">
             <i class="fas fa-arrow-circle-up mr-3"></i>
             Service Request System
-        </a>
+        </a>        
     </aside>
 
     <div class="w-full flex flex-col h-screen overflow-y-hidden">
@@ -174,7 +197,6 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
-                                <span class="sr-only">Search</span>
                             </button>
                         </div>
                     </form>
@@ -206,12 +228,17 @@
                                                         <span class="font-medium">{{ $request->no_bpj }}</span>
                                                     </div>
                                                 </td>
-                                                <td class="py-3 px-6 text-left">
-                                                    <div class="flex flex-col items-start">   
-                                                        <div class="truncate-text w-full" id="text-{{ $request->id }}">{{ $request->deskripsi_permasalahan }}</div>
-                                                        <button onclick="toggleExpand('{{ $request->id }}')" class="text-blue-500 hover:text-blue-700 text-xs mt-1 focus:outline-none" id="btn-{{ $request->id }}">
+                                                <td class="py-3 px-6 text-left description-cell">
+                                                    <div class="flex flex-col">   
+                                                        <div class="truncate-text w-full" id="text-{{ $request->id }}">
+                                                            {{ $request->deskripsi_permasalahan }}
+                                                        </div>
+                                                        <button 
+                                                            onclick="toggleExpand('{{ $request->id }}')" 
+                                                            class="text-blue-500 hover:text-blue-700 text-xs mt-1 focus:outline-none self-start" 
+                                                            id="btn-{{ $request->id }}">
                                                             Read more
-                                                        </button>
+                                                            </button>
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
@@ -225,9 +252,8 @@
                                                         @endif
                                                     </div>
                                                 </td>
-                                                
                                                 <td class="py-3 px-6 text-center flex flex-col items-center">
-                                                   @if($request->bukti_foto)
+                                                    @if($request->bukti_foto)
                                                         <img src="{{ url('storage/' . $request->bukti_foto) }}" alt="" class="w-16 h-16 object-cover rounded mt-2">
                                                     @else
                                                         <span class="text-gray-400 mt-2">Tidak ada foto</span>
@@ -235,22 +261,29 @@
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
                                                     <span>{{ $request->request_date->format('d/m/Y') }} | Jam {{ $request->request_date->format('H:i') }}</span>
-                                                </td>                                                
-                                                <td class="py-3 px-6 text-center">
+                                                </td>
+                                                <td class="py-3 px-6 text-center whitespace-nowrap">
                                                     @switch($request->status)
-                                                        @case('Pending')
-                                                            <span class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs">Pending</span>
+                                                        @case('pending')
+                                                            <span class="bg-yellow-300 text-yellow-800 py-1 px-3 rounded-full text-xs">Pending</span>
                                                             @break
-                                                        @case('In Progress')
-                                                            <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs">In Progress</span>
+                                                        @case('ongoing')
+                                                            <span class="bg-blue-300 text-blue-800 py-1 px-3 rounded-full text-xs">In Progress</span>
                                                             @break
-                                                        @case('Completed')
-                                                            <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Completed</span>
+                                                        @case('admins')
+                                                            <span class="bg-indigo-300 text-indigo-800 py-1 px-3 rounded-full text-xs">Di Admin</span>
+                                                            @break
+                                                        @case('spv')
+                                                            <span class="bg-orange-300 text-orange-800 py-1 px-3 rounded-full text-xs">Di SPV</span>
+                                                            @break
+                                                        @case('plants')
+                                                            <span class="bg-lime-300 text-lime-800 py-1 px-3 rounded-full text-xs">Di Plants</span>
                                                             @break
                                                         @default
                                                             <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">{{ $request->status }}</span>
                                                     @endswitch
                                                 </td>
+                                                
                                             </tr>
                                         @endforeach
                                     @endif
@@ -285,20 +318,34 @@
         }
 
         function showNotification() {
-        const notification = document.getElementById('loginSuccessNotification');
-        notification.classList.remove('opacity-0');
-        notification.classList.add('opacity-100');
-        
-        setTimeout(() => {
-            notification.classList.remove('opacity-100');
-            notification.classList.add('opacity-0');
+            const notification = document.getElementById('loginSuccessNotification');
+            
+            // Atur posisi awal (di luar layar, seperti gaya Genshin)
+            notification.style.top = '-100px';
+            notification.style.opacity = '0';
+            notification.style.transition = 'all 0.5s ease-out';
+
+            // Tampilkan notifikasi (meluncur ke bawah)
             setTimeout(() => {
-                notification.remove();
-            }, 500);
-            }, 3000);
+                notification.style.top = '20px'; // Posisi di layar
+                notification.style.opacity = '1';
+            }, 100); // Sedikit delay untuk efek
+
+            // Sembunyikan notifikasi setelah beberapa detik
+            setTimeout(() => {
+                notification.style.top = '-100px'; // Kembali keluar layar
+                notification.style.opacity = '0';
+
+                // Hapus elemen dari DOM setelah animasi selesai
+                setTimeout(() => {
+                    notification.remove();
+                }, 500); // Delay sesuai durasi animasi keluar
+            }, 3000); // Tampilkan selama 3 detik
         }
 
+        // Jalankan notifikasi saat DOM siap
         document.addEventListener('DOMContentLoaded', showNotification);
     </script>
 </body>
 </html>
+    

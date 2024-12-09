@@ -21,9 +21,12 @@ return new class extends Migration
             $table->dateTime('request_date');
             $table->text('deskripsi_permasalahan');
             $table->string('bukti_foto')->nullable();
-            $table->enum('jenis', ['urgent', 'non-urgent', 'supervisor'])->default('supervisor');
-            $table->enum('status', ['pending', 'ongoing', 'canceled', 'done', 'rejected', 'spv'])->default('spv');
-            $table->enum('tugas', ['pengecekan', 'perbaikan'])->default('pengecekan');
+            $table->enum('jenis', ['urgent', 'non-urgent', 'internal', 'eksternal', 'supervisor'])->default('supervisor');
+            $table->enum('status', ['pending', 'ongoing', 'canceled', 'done', 'rejected', 'spv', 'plants', 'admins'])->default('spv');
+            $table->enum('tugas', ['pengecekan', 'perbaikan'])->nullable();
+            $table->unsignedBigInteger('teknisi_id')->nullable();
+            $table->foreign('teknisi_id')->references('id')->on('users');
+
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

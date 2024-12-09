@@ -22,16 +22,18 @@
         .nav-item:hover { background: #eb5b00; }
         .account-link:hover { background: #ff6200; }
         .truncate-text {
-            max-width: 300px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        max-width: 100%;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
         }
+        
         .expanded {
-            white-space: pre-wrap;
+            white-space: normal; /* Ganti dari pre-wrap ke normal */
             word-break: break-word;
+            max-width: 100%;
         }
         .notification {
             position: fixed;
@@ -67,7 +69,7 @@
             <br>
             <a href="#" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                 <i class="fas  fa-clipboard mr-3"></i>
-                History Requesty
+                History Request
             </a>
         </nav>
         <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
@@ -183,7 +185,19 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $request->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $request->departemen }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $request->jabatan }}</td>
-                                        <td class="px-6 py-4">{{ $request->deskripsi_permasalahan }}</td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex flex-col max-w-md"> <!-- Tambahkan max-width -->
+                                                <div class="truncate-text" id="text-{{ $request->id }}">
+                                                    {{ $request->deskripsi_permasalahan }}
+                                                </div>
+                                                <button 
+                                                    onclick="toggleExpand('{{ $request->id }}')" 
+                                                    class="text-blue-500 hover:text-blue-700 text-xs mt-1 focus:outline-none self-start" 
+                                                    id="btn-{{ $request->id }}">
+                                                    Read more
+                                                </button>
+                                            </div>
+                                        </td>                                        
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex space-x-2">
                                                 <form action="{{ route('super.request.updateJenis', $request) }}" method="POST">
@@ -194,7 +208,7 @@
                                                         Urgent
                                                     </button>
                                                 </form>
-                    
+                                
                                                 <form action="{{ route('super.request.updateJenis', $request) }}" method="POST">
                                                     @csrf
                                                     @method('PATCH')
@@ -207,7 +221,8 @@
                                         </td>
                                     </tr>
                                     @endforeach
-                                </tbody>  
+                                </tbody>
+                                
                             </table>
                         </div>
                     </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plant Dashboard</title>
+    <title>Admin Dashboard</title>
     <meta name="description" content="">
 
     <!-- Tailwind -->
@@ -56,15 +56,10 @@
     @endif
 
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
-        <div class="p-6 space-y-5">
-            <a href="dashboard" class="text-white text-3xl font-semibold uppercase hover:text-gray-300 block">
-                Plant
-            </a>
-            <a href="{{ route('plant.requests.index') }}" class="w-full max-w-xs bg-white cta-btn font-semibold text-sm py-3 mt-5 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-between no-underline">
-                <span class="flex-grow text-center">Request Non-Urgent</span>
-            </a>            
-            <a href="#" class="w-full max-w-xs bg-white cta-btn font-semibold text-sm py-3 mt-5 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-between no-underline">
-                <span class="flex-grow text-center">Request Eksternal</span>
+        <div class="p-6">
+            <a href="dashboard" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
+            <a href="#" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center no-underline">
+                <i class="fas fa-list mr-3"></i> Request Masuk
             </a>
         </div>
         <nav class="text-white text-base font-semibold pt-3">
@@ -83,6 +78,11 @@
                 User List
             </a>
             <br>
+            <a href="{{ route('admin.register') }}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+                <i class="fas fa-user-plus mr-3"></i>
+                Add Account
+            </a>
+            <br>
             <a href="#" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                 <i class="fas fa-tools mr-3"></i>
                 List Teknisi
@@ -91,7 +91,7 @@
             <a href="#" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                 <i class="fas fa-file-alt mr-3"></i>
                 Laporan Teknisi
-            </a>        
+            </a>
         </nav>
         <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
             <i class="fas fa-arrow-circle-up mr-3"></i>
@@ -119,7 +119,7 @@
                 <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
         
                 <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-                    <a href="{{ route('plant.profile') }}" class="block px-4 py-2 account-link hover:text-white">Profile</a>
+                    <a href="{{ route('admin.profile') }}" class="block px-4 py-2 account-link hover:text-white">Profile</a>
                     <a href="{{ route('account.logout') }}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                 </div>
             </div>
@@ -128,7 +128,7 @@
         <!-- Mobile Header & Nav -->
         <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
             <div class="flex items-center justify-between">
-                <a href="index.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Plant</a>
+                <a href="index.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
                 <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
                     <i x-show="!isOpen" class="fas fa-bars"></i>
                     <i x-show="isOpen" class="fas fa-times"></i>
@@ -161,57 +161,43 @@
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <div class="mb-8">
-                    <h2 class="text-2xl font-semibold pb-4">
-                        <i class="fas fa-clock mr-3 text-blue-500"></i> Ongoing Requests
-                    </h2>
+                <h1 class="text-3xl text-black pb-6">Request Masuk</h1>
+                
+                <div class="w-full mt-12">
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full table-auto">
-                                <thead class="bg-gray-200">
+                                <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                                     <tr>
-                                        <th class="px-4 py-2 text-left">No. BPJ</th>
-                                        <th class="px-4 py-2 text-left">Name</th>
-                                        <th class="px-4 py-2 text-left">Departemen</th>
-                                        <th class="px-4 py-2 text-left">Jabatan</th>
-                                        <th class="px-4 py-2 text-left">Deskripsi Permasalahan</th>
-                                        <th class="px-4 py-2 text-center">Status</th>
+                                        <th class="py-3 px-6 text-left">No. BPJ</th>
+                                        <th class="py-3 px-6 text-left">Nama</th>
+                                        <th class="py-3 px-6 text-center">Departemen</th>
+                                        <th class="py-3 px-6 text-center">Jabatan</th>
+                                        <th class="py-3 px-6 text-center">Permasalahan</th>
+                                        <th class="py-3 px-6 text-center">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @forelse($ongoingRequests as $request)
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-4 py-3">{{ $request->bpj_number }}</td>
-                                            <td class="px-4 py-3">{{ $request->name }}</td>
-                                            <td class="px-4 py-3">{{ $request->department }}</td>
-                                            <td class="px-4 py-3">{{ $request->jabatan }}</td>
-                                            <td class="px-4 py-3">
-                                                <div class="flex flex-col">
-                                                    <div class="truncate-text" id="text-{{ $request->id }}">
-                                                        {{ $request->deskripsi_permasalahan }}
-                                                    </div>
-                                                    <button 
-                                                        onclick="toggleExpand('{{ $request->id }}')" 
-                                                        class="text-blue-500 hover:text-blue-700 text-xs mt-1 focus:outline-none" 
-                                                        id="btn-{{ $request->id }}">
-                                                        Read more
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <span class="px-2 py-1 text-sm rounded-full bg-yellow-100 text-yellow-800">
-                                                    {{ ucfirst($request->status) }}
-                                                </span>
+                                <tbody class="text-gray-600 text-sm">
+                                    @forelse($requests as $request)
+                                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                            <td class="py-3 px-6 text-left">{{ $request->no_bpj }}</td>
+                                            <td class="py-3 px-6 text-left">{{ $request->name }}</td>
+                                            <td class="py-3 px-6 text-center">{{ $request->departemen }}</td>
+                                            <td class="py-3 px-6 text-center">{{ $request->jabatan }}</td>
+                                            <td class="py-3 px-6 text-center truncate-text">{{ $request->deskripsi_permasalahan }}</td>
+                                            <td class="py-3 px-6 text-center">
+                                                <a href="{{ route('admin.requests.show', $request) }}" 
+                                                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                                    Detail
+                                                </a>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="px-4 py-3 text-center text-gray-500">
-                                                Tidak ada request yang sedang berlangsung
-                                            </td>
+                                            <td colspan="6" class="py-3 px-6 text-center">Tidak ada request yang tersedia</td>
                                         </tr>
                                     @endforelse
-                                </tbody>    
+                                </tbody>
                             </table>
                         </div>
                     </div>

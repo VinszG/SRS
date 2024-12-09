@@ -19,10 +19,16 @@ class UserRequest extends Model
         'bukti_foto',
         'jenis',
         'status',
-        'tugas'
+        'tugas',
+        'teknisi_id'
     ];
 
     protected $casts = [
         'request_date' => 'datetime',
     ];
+
+    public function teknisi()
+    {
+        return $this->belongsTo(User::class, 'teknisi_id');
+    }
 }

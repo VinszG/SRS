@@ -119,7 +119,36 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
                                 Status
                             </label>
-                            <p class="text-gray-700 text-base">{{ ucfirst($request->status) }}</p>
+                            <p class="text-gray-700 text-base">
+                                @switch($request->status)
+                                @case('pending')
+                                    <span class="bg-yellow-300 text-yellow-800 py-1 px-3 rounded-full text-xs">Pending</span>
+                                    @break
+                                @case('ongoing')
+                                    <span class="bg-blue-300 text-blue-800 py-1 px-3 rounded-full text-xs">In Progress</span>
+                                    @break
+                                @case('canceled')
+                                    <span class="bg-gray-300 text-gray-800 py-1 px-3 rounded-full text-xs">Canceled</span>
+                                    @break
+                                @case('done')
+                                    <span class="bg-teal-300 text-teal-800 py-1 px-3 rounded-full text-xs">Selesai</span>
+                                    @break
+                                @case('rejected')
+                                    <span class="bg-red-300 text-red-800 py-1 px-3 rounded-full text-xs">Ditolak</span>
+                                    @break
+                                @case('admins')
+                                    <span class="bg-indigo-300 text-indigo-800 py-1 px-3 rounded-full text-xs">Di Admin</span>
+                                    @break
+                                @case('spv')
+                                    <span class="bg-orange-300 text-orange-800 py-1 px-3 rounded-full text-xs">Di SPV</span>
+                                    @break
+                                @case('plants')
+                                    <span class="bg-lime-300 text-lime-800 py-1 px-3 rounded-full text-xs">Di Plants</span>
+                                    @break
+                                @default
+                                    <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">{{ $request->status }}</span>
+                            @endswitch
+                            </p>
                         </div>
                         <div class="mb-6">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="created_at">

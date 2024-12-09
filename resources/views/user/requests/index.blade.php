@@ -205,19 +205,35 @@
                                                 </td>                                                
                                                 <td class="py-3 px-6 text-center whitespace-nowrap">
                                                     @switch($request->status)
-                                                        @case('Pending')
-                                                            <span class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs">Pending</span>
+                                                        @case('pending')
+                                                            <span class="bg-yellow-300 text-yellow-800 py-1 px-3 rounded-full text-xs">Pending</span>
                                                             @break
-                                                        @case('In Progress')
-                                                            <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs">In Progress</span>
+                                                        @case('ongoing')
+                                                            <span class="bg-blue-300 text-blue-800 py-1 px-3 rounded-full text-xs">In Progress</span>
                                                             @break
-                                                        @case('Completed')
-                                                            <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Completed</span>
+                                                        @case('canceled')
+                                                            <span class="bg-gray-300 text-gray-800 py-1 px-3 rounded-full text-xs">Canceled</span>
+                                                            @break
+                                                        @case('done')
+                                                            <span class="bg-teal-300 text-teal-800 py-1 px-3 rounded-full text-xs">Selesai</span>
+                                                            @break
+                                                        @case('rejected')
+                                                            <span class="bg-red-300 text-red-800 py-1 px-3 rounded-full text-xs">Ditolak</span>
+                                                            @break
+                                                        @case('admins')
+                                                            <span class="bg-indigo-300 text-indigo-800 py-1 px-3 rounded-full text-xs">Di Admin</span>
+                                                            @break
+                                                        @case('spv')
+                                                            <span class="bg-orange-300 text-orange-800 py-1 px-3 rounded-full text-xs">Di SPV</span>
+                                                            @break
+                                                        @case('plants')
+                                                            <span class="bg-lime-300 text-lime-800 py-1 px-3 rounded-full text-xs">Di Plants</span>
                                                             @break
                                                         @default
                                                             <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">{{ $request->status }}</span>
                                                     @endswitch
                                                 </td>
+                                                                                                                                             
                                                 <td class="py-3 px-6 text-center whitespace-nowrap">
                                                     <a href="{{ route('user.requests.show', $request) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">View</a>
                                                 </td>

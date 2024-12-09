@@ -17,7 +17,6 @@ class SuperRequestController extends Controller
         ->orderBy('request_date', 'desc')
         ->paginate(10);
 
-        // Pastikan view menerima variable $requests
         return view('super.dashboard', compact('requests'));
     }
 
@@ -32,12 +31,16 @@ class SuperRequestController extends Controller
             'jenis' => 'required|in:urgent,non-urgent',
         ]);
 
+        // Jika jenis 'urgent', set status menjadi 'admins', jika tidak, set status menjadi 'plants'
+        $status = $validatedData['jenis'] === 'urgent' ? 'admins' : 'plants';
+
         $userRequest->update([
             'jenis' => $validatedData['jenis'],
-            'status' => 'pending'
+            'status' => $status
         ]);
 
         return redirect()->route('super.dashboard')
             ->with('success', 'Status request berhasil diperbarui.');
     }
+
 }

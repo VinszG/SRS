@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminRequestController;
 use App\Http\Controllers\PlantDashboardController;
 use App\Http\Controllers\PlantRequestController;
 use App\Http\Controllers\SuperDashboardController;
@@ -48,6 +49,13 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function() {
         Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('/admin/profile', [AdminDashboardController::class, 'profile'])->name('admin.profile');
         Route::post('/admin/profile/update', [AdminDashboardController::class, 'updateProfile'])->name('admin.profile.update');
+        Route::post('/admin/register', [AdminDashboardController::class, 'processRegisterAdmin'])->name('admin.register.process');
+        Route::get('/admin/register', [AdminDashboardController::class, 'showRegisterForm'])->name('admin.register');
+
+        Route::get('/admin/requests', [AdminRequestController::class, 'index'])->name('admin.requests.index');
+        Route::get('/admin/requests/{request}', [AdminRequestController::class, 'show'])->name('admin.requests.show');
+        Route::post('/admin/requests/{userRequest}/assign', [AdminRequestController::class, 'assignTeknisi'])->name('admin.requests.assign');
+
     });
 
     // Plant routes
@@ -55,6 +63,10 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function() {
         Route::get('plant/dashboard', [PlantDashboardController::class, 'index'])->name('plant.dashboard');
         Route::get('/plant/profile', [PlantDashboardController::class, 'profile'])->name('plant.profile');
         Route::post('/plant/profile/update', [PlantDashboardController::class, 'updateProfile'])->name('plant.profile.update');
+
+        Route::get('/plant/requests', [PlantRequestController::class, 'index'])->name('plant.requests.index');
+        Route::get('/plant/requests/{request}', [PlantRequestController::class, 'show'])->name('plant.requests.show');
+        Route::put('/plant/requests/{userRequest}/status', [PlantRequestController::class, 'updateStatus'])->name('plant.requests.updateStatus');
     });
 
     // Super routes 

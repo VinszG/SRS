@@ -14,15 +14,19 @@ class UserRequestController extends Controller
         $search = $request->input('search');
             
         $requests = UserRequest::where('user_id', Auth::id())
+            ->whereIn('status', ['canceled', 'done', 'rejected'])
             ->when($search, function ($query, $search) {
-                return $query->where('no_bpj', 'like', "%{$search}%")
-                            ->orWhere('deskripsi_permasalahan', 'like', "%{$search}%");
+                return $query->where(function($q) use ($search) {
+                    $q->where('no_bpj', 'like', "%{$search}%")
+                    ->orWhere('deskripsi_permasalahan', 'like', "%{$search}%");
+                });
             })
             ->orderBy('request_date', 'desc')
             ->paginate(5);
 
         return view('user.requests.index', compact('requests'));
     }
+
 
     public function create()
     {

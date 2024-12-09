@@ -40,6 +40,18 @@
             z-index: 1000;
             max-width: 300px;
         }
+        .long-text {
+            max-width: 100%;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+            border: 1px solid #e9ecef;
+            line-height: 1.5;
+        }
+
     </style>
 </head>
 <body class="bg-gray-100 font-family-inter flex">
@@ -161,51 +173,164 @@
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <a class="text-3xl text-black pb-6" href="dashboard">
-                    Dashboard
-                </a>
-                <div class="w-full mt-12">
-                    <p class="text-2xl font-semibold pb-4 flex items-center">
-                        <i class="fas fa-clipboard-list mr-3 text-blue-500"></i> Current Request
-                    </p>
-                    <form action="dashboard" method="GET" class="mb-4">
-                        <div class="flex items-center">
-                            <div class="relative w-full">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                    </svg>
-                                </div>
-                                <input type="text" name="search" id="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Cari berdasarkan No. BPJ atau Deskripsi" value="{{ request('search') }}">
+                <h1 class="text-3xl text-black pb-6">Detail Request</h1>
+                
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <!-- Header -->
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Request #{{ $request->no_bpj }}</h2>
+                    </div>
+                    
+                    <!-- Basic Information Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Name -->
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-700 font-bold mb-2">Nama:</p>
+                            <p class="text-gray-600">{{ $request->name }}</p>
+                        </div>
+            
+                        <!-- Status -->
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-700 font-bold mb-2">Status:</p>
+                            <p class="text-gray-600">
+                            @switch($request->status)
+                                @case('pending')
+                                    <span class="bg-yellow-300 text-yellow-800 py-1 px-3 rounded-full text-xs">Pending</span>
+                                    @break
+                                @case('ongoing')
+                                    <span class="bg-blue-300 text-blue-800 py-1 px-3 rounded-full text-xs">In Progress</span>
+                                    @break
+                                @case('canceled')
+                                    <span class="bg-gray-300 text-gray-800 py-1 px-3 rounded-full text-xs">Canceled</span>
+                                    @break
+                                @case('done')
+                                    <span class="bg-teal-300 text-teal-800 py-1 px-3 rounded-full text-xs">Selesai</span>
+                                    @break
+                                @case('rejected')
+                                    <span class="bg-red-300 text-red-800 py-1 px-3 rounded-full text-xs">Ditolak</span>
+                                    @break
+                                @case('admins')
+                                    <span class="bg-indigo-300 text-indigo-800 py-1 px-3 rounded-full text-xs">Di Admin</span>
+                                    @break
+                                @case('spv')
+                                    <span class="bg-orange-300 text-orange-800 py-1 px-3 rounded-full text-xs">Di SPV</span>
+                                    @break
+                                @case('plants')
+                                    <span class="bg-lime-300 text-lime-800 py-1 px-3 rounded-full text-xs">Di Plants</span>
+                                    @break
+                                @default
+                                    <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">{{ $request->status }}</span>
+                            @endswitch
+                            </p>
+                        </div>
+                        
+                        <!-- Department -->
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-700 font-bold mb-2">Departemen:</p>
+                            <p class="text-gray-600">{{ $request->departemen }}</p>
+                        </div>
+                        
+                        <!-- Position -->
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-700 font-bold mb-2">Jabatan:</p>
+                            <p class="text-gray-600">{{ $request->jabatan }}</p>
+                        </div>
+                        
+                        <!-- Request Date -->
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-700 font-bold mb-2">Tanggal Request:</p>
+                            <p class="text-gray-600">{{ $request->request_date->format('d/m/Y') }} | Jam {{ $request->request_date->format('H:i') }}</p>
+                        </div>
+            
+                        <!-- Type -->
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-700 font-bold mb-2">Jenis:</p>
+                            <p class="text-gray-600">
+                                @if($request->jenis === 'urgent')
+                                    <span class="bg-red-300 text-red-800 py-1 px-3 rounded-full text-xs">Urgent</span>
+                                @else
+                                    <span class="bg-green-300 text-green-800 py-1 px-3 rounded-full text-xs">Non-Urgent</span>
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Problem Description -->
+                    <div class="mt-8 bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-700 font-bold mb-2">Deskripsi Permasalahan:</p>
+                        <p class="text-gray-600 whitespace-pre-line break-words">{{ $request->deskripsi_permasalahan }}</p>
+                    </div>
+                    
+                    <!-- Photo Evidence -->
+                    @if($request->bukti_foto)
+                        <div class="mt-8">
+                            <p class="text-gray-700 font-bold mb-2">Bukti Foto:</p>
+                            <div class="relative">
+                                <!-- Thumbnail -->
+                                <img src="{{ asset('storage/'.$request->bukti_foto) }}" 
+                                    alt="Bukti Foto" 
+                                    class="h-48 w-48 object-cover rounded-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity" 
+                                    onclick="openLightbox(this.src)"
+                                >
                             </div>
-                            <button type="submit" class="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                                <span class="sr-only">Search</span>
+                        </div>
+                    
+                        <!-- Lightbox Modal -->
+                        <div id="lightbox" 
+                            class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50" 
+                            onclick="closeLightbox()">
+                            <div class="relative bg-white p-1 rounded-lg">
+                                <img id="lightbox-img" 
+                                    src="" 
+                                    class="h-96 w-96 object-cover rounded" 
+                                    alt="Bukti Foto Full Size">
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="mt-8 bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-lg font-bold mb-4">Penugasan Teknisi</h3>
+                        
+                        <form action="{{ route('admin.requests.assign', $request->id) }}" method="POST">
+                            @csrf
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">
+                                    Pilih Teknisi
+                                </label>
+                                <select name="teknisi_id" class="shadow border rounded w-full py-2 px-3 text-gray-700">
+                                    <option value="">Pilih Teknisi</option>
+                                    @foreach(\App\Models\User::where('role', 'teknisi')->get() as $teknisi)
+                                        <option value="{{ $teknisi->id }}">{{ $teknisi->name }}</option>
+                                    @endforeach
+                                </select>                                
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">
+                                    Jenis Tugas
+                                </label>
+                                <select name="tugas" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <option value="pengecekan">Pengecekan</option>
+                                    <option value="perbaikan">Perbaikan</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Tugaskan Teknisi
                             </button>
-                        </div>
-                    </form>
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                        <div class="overflow-x-auto max-h-96">
-                            <table class="w-full table-auto">
-                                <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal sticky top-0">
-                                    <tr>
-                                        <th class="py-3 px-6 text-left whitespace-nowrap">No. BPJ</th>
-                                        <th class="py-3 px-6 text-left">Nama</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Departemen</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Jabatan</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Tanggal Dibuat</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Permasalahan</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Teknisi</th>
-                                        <th class="py-3 px-6 text-center whitespace-nowrap">Status</th>
-                                    </tr>
-                                </thead>    
-                            </table>
-                        </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Back Button -->
+                    <div class="mt-8 pt-4 border-t border-gray-200">
+                        <a href="{{ route('admin.requests.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            Kembali
+                        </a>
                     </div>
                 </div>
             </main>
+            
         </div>
     </div>
 
@@ -240,6 +365,20 @@
                     notification.remove();
                 }, 500);
             }
+        }
+
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = imgSrc;
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('flex');
+            lightbox.classList.add('hidden');
         }
 
         // Auto-hide notification after 5 seconds

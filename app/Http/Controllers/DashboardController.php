@@ -11,6 +11,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $query = UserRequest::where('user_id', Auth::id())
+                    ->whereNotIn('status', ['Done', 'Canceled', 'Rejected'])
                     ->orderBy('request_date', 'desc');
 
         if ($request->has('search')) {

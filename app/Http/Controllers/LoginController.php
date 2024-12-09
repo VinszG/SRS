@@ -91,10 +91,10 @@ class LoginController extends Controller
     public function processRegister(Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/',
             'password' => 'required|confirmed|min:8'
         ]); 
-
+    
         if ($validator->passes()) {
             $user = new User();
             $user->name = $request->name;
@@ -102,7 +102,7 @@ class LoginController extends Controller
             $user->password = Hash::make($request->password);
             $user->role = 'user'; // Atur default role sebagai 'user', bisa diubah sesuai kebutuhan
             $user->save();
-
+    
             return redirect()->route('account.login')->with('success', 'Kamu Berhasil Melakukan Registrasi');
         } else {
             return redirect()->route('account.register')
@@ -110,6 +110,7 @@ class LoginController extends Controller
                 ->withErrors($validator);
         }
     }
+    
 
     public function logout(Request $request) {
         Auth::logout();
